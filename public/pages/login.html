@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Login - CarePath</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    
+    <style>
+        /* ============================================================
+           CSS VARIABLES & RESET
+           ============================================================ */
+        :root {
+            --primary: #87CEEB;
+            --primary-dark: #5BA3C9;
+            --primary-light: #D4EEF7;
+            --secondary: #90EE90;
+            --secondary-dark: #6BCB6B;
+            --secondary-light: #D4F5D4;
+            --white: #FFFFFF;
+            --off-white: #F8F9FA;
+            --off-white-dark: #E9ECEF;
+            --off-white-light: #F5F0EB;
+            --text-dark: #1a2a3a;
+            --text-gray: #6B7A8A;
+            --text-light: #6b7a8a;
+            --text-muted: #4a5a6a;
+            --shadow: 0 10px 40px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 60px rgba(0,0,0,0.12);
+            --shadow-sm: 0 2px 12px rgba(0,0,0,0.06);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-md: 12px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --nav-bg: rgba(255,255,255,0.92);
+            --card-bg: rgba(255,255,255,0.85);
+            --skyblue-gradient: linear-gradient(135deg, #87CEEB, #5BA3C9);
+            --light-green-gradient: linear-gradient(135deg, #90EE90, #6BCB6B);
+            --border-color: #E5E7EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--off-white);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: linear-gradient(135deg, var(--off-white) 0%, var(--primary-light) 40%, var(--secondary-light) 60%, var(--off-white) 100%);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* ===== Background Decor ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -30%;
+            right: -15%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(135,206,235,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatBg 12s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -25%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(144,238,144,0.10) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatBgReverse 15s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-30px) scale(1.08); }
+        }
+        @keyframes floatBgReverse {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(30px) scale(1.08); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        /* ============================================================
+           UTILITY CLASSES
+           ============================================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+        .flex {
+            display: flex;
+            align-items: center;
+        }
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+        .gap-1 { gap: 8px; }
+        .gap-2 { gap: 12px; }
+        .gap-3 { gap: 16px; }
+        .mt-2 { margin-top: 12px; }
+        .mt-3 { margin-top: 20px; }
+        .mt-4 { margin-top: 32px; }
+        .mt-5 { margin-top: 48px; }
+        .mb-3 { margin-bottom: 20px; }
+        .mb-4 { margin-bottom: 32px; }
+        .mb-5 { margin-bottom: 48px; }
+
+        .text-center {
+            text-align: center;
+        }
+        .text-right {
+            text-align: right;
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease both;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .section-divider {
+            width: 60px;
+            height: 4px;
+            background: var(--skyblue-gradient);
+            border-radius: 4px;
+            margin: 12px auto 20px;
+        }
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--text-gray);
+            max-width: 700px;
+        }
+        .section-subtitle.center {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            min-height: 44px;
+        }
+        .btn-primary {
+            background: var(--skyblue-gradient);
+            color: white;
+            box-shadow: 0 4px 16px rgba(135,206,235,0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(135,206,235,0.4);
+        }
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+        .btn-secondary {
+            background: var(--light-green-gradient);
+            color: var(--text-dark);
+            box-shadow: 0 4px 16px rgba(144,238,144,0.3);
+        }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(144,238,144,0.4);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--text-dark);
+            border: 2px solid var(--off-white-dark);
+        }
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary-dark);
+            background: rgba(135,206,235,0.08);
+        }
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+        .btn-lg {
+            padding: 14px 32px;
+            font-size: 16px;
+            min-height: 50px;
+        }
+        .btn-sm {
+            padding: 8px 18px;
+            font-size: 13px;
+            min-height: 36px;
+        }
+
+        /* ============================================================
+           NAVBAR - Enhanced Version
+           ============================================================ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(135, 206, 235, 0.15);
+            padding: 0;
+            animation: slideDown 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+            border-bottom-color: rgba(135, 206, 235, 0.25);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ===== Brand / Logo ===== */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.02);
+        }
+
+        .navbar-brand .logo-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .navbar-brand .logo-icon {
+            height: 40px;
+            width: 40px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 2px 10px rgba(135, 206, 235, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover .logo-icon {
+            box-shadow: 0 4px 20px rgba(135, 206, 235, 0.5);
+            transform: rotate(-5deg) scale(1.05);
+        }
+
+        .navbar-brand .logo-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: 8px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(135, 206, 235, 0.4);
+        }
+
+        .navbar-brand .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .navbar-brand .brand-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand .brand-name .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-brand .brand-version {
+            font-size: 9px;
+            font-weight: 500;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            -webkit-text-fill-color: var(--text-light);
+            background: none;
+        }
+
+        /* ===== Navigation Links ===== */
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-gray);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-decoration: none;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .nav-links a i {
+            font-size: 16px;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover i,
+        .nav-links a.active i {
+            opacity: 1;
+        }
+
+        /* Hover & Active States */
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2.5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .nav-links a:hover::before,
+        .nav-links a.active::before {
+            width: 60%;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text-dark);
+            background: rgba(135, 206, 235, 0.08);
+        }
+
+        .nav-links a:active {
+            transform: scale(0.96);
+        }
+
+        /* ===== Nav Buttons ===== */
+        .nav-links .nav-btn {
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-links .nav-btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 2px 15px rgba(135, 206, 235, 0.3);
+        }
+
+        .nav-links .nav-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(135, 206, 235, 0.4);
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
+        }
+
+        .nav-links .nav-btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .nav-links .nav-btn-secondary {
+            background: transparent;
+            color: var(--text-dark);
+            border: 2px solid var(--border-color);
+        }
+
+        .nav-links .nav-btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(135, 206, 235, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .nav-links .nav-btn-secondary:active {
+            transform: translateY(0);
+        }
+
+        .nav-links .nav-btn-outline {
+            background: transparent;
+            color: var(--text-gray);
+            border: 2px solid var(--border-color);
+        }
+
+        .nav-links .nav-btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--text-dark);
+            background: rgba(135, 206, 235, 0.08);
+            transform: translateY(-2px);
+        }
+
+        /* ===== Hamburger Menu ===== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger:hover {
+            background: rgba(135, 206, 235, 0.08);
+        }
+
+        .hamburger:active {
+            transform: scale(0.92);
+        }
+
+        .hamburger span {
+            display: block;
+            width: 26px;
+            height: 2.5px;
+            background: var(--text-dark);
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform-origin: center;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ============================================================
+           LOGIN CARD
+           ============================================================ */
+        .login-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+        
+        .login-card {
+            max-width: 440px;
+            width: 100%;
+            padding: 40px;
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: var(--transition);
+            animation: fadeInUp 0.6s ease both;
+        }
+        .login-card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+        .login-card .logo-icon {
+            font-size: 48px;
+            color: var(--primary);
+            display: block;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        .login-card h2 {
+            font-size: 28px;
+            font-weight: 800;
+            text-align: center;
+        }
+        .login-card .divider {
+            width: 60px;
+            height: 4px;
+            background: var(--skyblue-gradient);
+            border-radius: 4px;
+            margin: 8px auto 16px;
+        }
+        .login-card .subtitle {
+            text-align: center;
+            font-size: 15px;
+            color: var(--text-gray);
+        }
+
+        /* ============================================================
+           FORM STYLES
+           ============================================================ */
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+        .form-group label .required {
+            color: #dc2626;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--off-white-dark);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 15px;
+            transition: var(--transition);
+            background: rgba(255,255,255,0.8);
+            color: var(--text-dark);
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(135,206,235,0.15);
+            background: white;
+        }
+        .form-control::placeholder {
+            color: var(--text-gray);
+            opacity: 0.6;
+        }
+        .form-control.error {
+            border-color: #dc2626;
+            animation: shake 0.4s ease;
+        }
+        .form-control.error:focus {
+            box-shadow: 0 0 0 4px rgba(220,38,38,0.12);
+        }
+        .form-control.success {
+            border-color: #10b981;
+        }
+        .form-control.success:focus {
+            box-shadow: 0 0 0 4px rgba(16,185,129,0.12);
+        }
+        .form-error {
+            font-size: 13px;
+            color: #dc2626;
+            margin-top: 4px;
+            display: none;
+        }
+        .form-error.visible {
+            display: block;
+        }
+        .form-hint {
+            font-size: 13px;
+            color: var(--text-gray);
+            margin-top: 4px;
+        }
+        .form-hint a {
+            color: var(--primary-dark);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .form-hint a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .form-check input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .form-check label {
+            font-size: 14px;
+            color: var(--text-gray);
+            cursor: pointer;
+        }
+
+        /* ============================================================
+           DEMO CREDENTIALS
+           ============================================================ */
+        .demo-credentials {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--off-white-dark);
+        }
+        .demo-credentials p {
+            font-size: 13px;
+            color: var(--text-gray);
+            text-align: center;
+            line-height: 1.8;
+        }
+        .demo-credentials strong {
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .demo-credentials strong:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        .demo-credentials .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            margin: 0 4px;
+        }
+        .badge-caregiver {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+        .badge-admin {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        /* ============================================================
+           TOAST NOTIFICATION
+           ============================================================ */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            max-width: 380px;
+            width: 100%;
+            animation: fadeInUp 0.4s ease;
+        }
+        .toast {
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(12px);
+            background: rgba(255,255,255,0.95);
+            border-left: 4px solid var(--primary);
+        }
+        .toast-success {
+            border-left-color: #10b981;
+        }
+        .toast-error {
+            border-left-color: #dc2626;
+        }
+        .toast-warning {
+            border-left-color: #f59e0b;
+        }
+        .toast .toast-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        .toast .toast-content {
+            flex: 1;
+        }
+        .toast .toast-title {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--text-dark);
+        }
+        .toast .toast-message {
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+        .toast .toast-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-gray);
+            padding: 0 4px;
+            transition: var(--transition);
+        }
+        .toast .toast-close:hover {
+            color: var(--text-dark);
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .footer {
+            margin-top: auto;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255,255,255,0.3);
+            padding: 36px 0 20px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        .footer .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 32px;
+        }
+        .footer h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+        .footer p {
+            color: var(--text-gray);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .footer ul {
+            list-style: none;
+        }
+        .footer ul li {
+            margin-bottom: 6px;
+        }
+        .footer ul a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        .footer ul a:hover {
+            color: var(--text-dark);
+            padding-left: 4px;
+        }
+        .footer-bottom {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--off-white-dark);
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        /* ============================================================
+           LOADING SPINNER
+           ============================================================ */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn.loading .btn-text {
+            visibility: hidden;
+        }
+        .btn.loading .spinner {
+            position: absolute;
+        }
+        .btn {
+            position: relative;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(255,255,255,0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 24px 20px;
+                gap: 12px;
+                transform: translateY(-120%);
+                transition: var(--transition);
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+                align-items: stretch;
+                text-align: center;
+            }
+            .nav-links.open {
+                transform: translateY(0);
+            }
+            .nav-links .btn {
+                justify-content: center;
+            }
+
+            .container {
+                padding: 0 16px;
+            }
+            .login-card {
+                padding: 28px 20px;
+            }
+            .login-card h2 {
+                font-size: 24px;
+            }
+            .footer .container {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn {
+                font-size: 13px;
+                padding: 10px 18px;
+                min-height: 38px;
+            }
+            .btn-lg {
+                padding: 12px 24px;
+                font-size: 15px;
+                min-height: 44px;
+            }
+            .login-card {
+                padding: 24px 16px;
+            }
+            .login-card h2 {
+                font-size: 22px;
+            }
+            .navbar-brand .brand-name {
+                font-size: 18px;
+            }
+            .form-control {
+                font-size: 14px;
+                padding: 10px 14px;
+            }
+            .toast-container {
+                left: 16px;
+                right: 16px;
+                max-width: none;
+            }
+        }
+
+        @media (max-height: 600px) and (orientation: landscape) {
+            .navbar {
+                padding: 6px 0;
+            }
+            .login-wrapper {
+                padding: 20px 0;
+                margin-top: 50px;
+            }
+            .login-card {
+                padding: 20px;
+            }
+            .login-card h2 {
+                font-size: 22px;
+            }
+            .form-group {
+                margin-bottom: 12px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        @media print {
+            .navbar, .footer { display: none; }
+            .login-wrapper { margin-top: 0; }
+            .login-card { border: 1px solid #ddd; box-shadow: none; }
+            .btn { display: none; }
+            .demo-credentials { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    NAVBAR
+    ============================================================ -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">
+                <div class="brand-text">
+                    <span class="brand-name">Safe<span class="highlight">Track</span></span>
+                    <span class="brand-version">v1.0</span>
+                </div>
+            </a>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="login.html" class="active">Login</a></li>
+                <li><a href="register.html" class="nav-btn nav-btn-secondary">Register</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ============================================================
+    LOGIN FORM
+    ============================================================ -->
+    <div class="login-wrapper">
+        <div class="login-card">
+            <i class="fas fa-shield-alt logo-icon"></i>
+            <h2>Welcome Back</h2>
+            <div class="divider"></div>
+            <p class="subtitle">Sign in to your CarePath account</p>
+
+            <form id="loginForm" class="mt-3" novalidate>
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="loginEmail">Email Address <span class="required">*</span></label>
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        class="form-control"
+                        placeholder="Enter your email"
+                        required
+                        autocomplete="email"
+                    />
+                    <div class="form-error" id="emailError">Please enter a valid email address</div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="loginPassword">Password <span class="required">*</span></label>
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        class="form-control"
+                        placeholder="Enter your password"
+                        required
+                        autocomplete="current-password"
+                    />
+                    <div class="form-error" id="passwordError">Please enter your password (min 6 characters)</div>
+                    <div class="form-hint text-right">
+                        <a href="#" id="forgotPassword">Forgot password?</a>
+                    </div>
+                </div>
+
+                <!-- Remember Me -->
+                <div class="form-check">
+                    <input type="checkbox" id="rememberMe" />
+                    <label for="rememberMe">Remember me</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-lg" id="loginBtn">
+                    <span class="btn-text"><i class="fas fa-sign-in-alt"></i> Sign In</span>
+                </button>
+
+                <div class="text-center mt-3">
+                    <p style="color: var(--text-gray); font-size: 14px;">
+                        Don't have an account?
+                        <a href="register.html" style="color: var(--primary-dark); font-weight: 600; text-decoration: none;">
+                            Register now
+                        </a>
+                    </p>
+                </div>
+            </form>
+
+            <!-- Demo Credentials 
+            <div class="demo-credentials">
+               <p>
+                    <span class="badge badge-caregiver">Caregiver</span>
+                    <strong id="demoCaregiver">caregiver@carepath.com</strong> / password123
+                    <br />
+                    <span class="badge badge-admin">Admin</span>
+                    <strong id="demoAdmin">admin@carepath.com</strong> / admin123
+                </p>
+            </div>
+            -->
+        </div>
+    </div>
+
+    <!-- ============================================================
+    FOOTER
+    ============================================================ -->
+    <footer class="footer">
+        <div class="container">
+            <div>
+                <h4><i class="fas fa-shield-alt" style="color: var(--primary);"></i> CarePath</h4>
+                <p>A community-driven platform dedicated to raising awareness and helping locate missing elderly individuals with Alzheimer's.</p>
+            </div>
+            <div>
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="community/active-cases.html">Cases</a></li>
+                </ul>
+            </div>
+            <div>
+                 <h4>For Caregivers</h4>
+                <ul>
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="caregiver/dashboard.html">Dashboard</a></li>
+                    <li><a href="caregiver/add-elderly.html">Add Profile</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="mailto:help@carepath.com"><i class="fas fa-envelope"></i> help@carepath.com</a></li>
+                    <li><a href="tel:+11234567890"><i class="fas fa-phone"></i> +1 (123) 456-7890</a></li>
+                </ul>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2025 CarePath. All rights reserved. Made with <i class="fas fa-heart" style="color: #dc2626;"></i> for the community.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script>
+        // ============================================================
+        // NAVBAR SCROLL EFFECT
+        // ============================================================
+        const navbar = document.getElementById('navbar');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            lastScroll = currentScroll;
+        }, { passive: true });
+
+        // ============================================================
+        // HAMBURGER TOGGLE
+        // ============================================================
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+            });
+        });
+
+        // ============================================================
+        // TOAST NOTIFICATION
+        // ============================================================
+        function showToast(title, message, type = 'info', duration = 4000) {
+            // Remove existing toast
+            const existing = document.querySelector('.toast-container');
+            if (existing) existing.remove();
+
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+
+            const container = document.createElement('div');
+            container.className = 'toast-container';
+
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${icons[type] || icons.info}</span>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="this.closest('.toast-container').remove()">&times;</button>
+            `;
+
+            container.appendChild(toast);
+            document.body.appendChild(container);
+
+            setTimeout(() => {
+                if (container.parentElement) {
+                    container.style.opacity = '0';
+                    container.style.transform = 'translateY(20px)';
+                    setTimeout(() => container.remove(), 400);
+                }
+            }, duration);
+        }
+
+        window.showToast = showToast;
+
+        // ============================================================
+        // FORM VALIDATION & SUBMISSION
+        // ============================================================
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+
+            // Validate Email
+            const email = document.getElementById('loginEmail');
+            const emailError = document.getElementById('emailError');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value.trim())) {
+                email.classList.add('error');
+                emailError.classList.add('visible');
+                isValid = false;
+            } else {
+                email.classList.remove('error');
+                email.classList.add('success');
+                emailError.classList.remove('visible');
+            }
+
+            // Validate Password
+            const password = document.getElementById('loginPassword');
+            const passwordError = document.getElementById('passwordError');
+            if (password.value.trim().length < 6) {
+                password.classList.add('error');
+                passwordError.classList.add('visible');
+                isValid = false;
+            } else {
+                password.classList.remove('error');
+                password.classList.add('success');
+                passwordError.classList.remove('visible');
+            }
+
+            if (isValid) {
+                // Show loading state
+                loginBtn.classList.add('loading');
+                loginBtn.innerHTML = '<span class="spinner"></span>';
+
+                // Simulate API call
+                setTimeout(() => {
+                    loginBtn.classList.remove('loading');
+                    loginBtn.innerHTML = '<span class="btn-text"><i class="fas fa-sign-in-alt"></i> Sign In</span>';
+                    
+                    // Check credentials (demo)
+                    const emailVal = email.value.trim();
+                    const passVal = password.value.trim();
+                    
+                    if ((emailVal === 'caregiver@carepath.com' && passVal === 'password123') ||
+                        (emailVal === 'admin@carepath.com' && passVal === 'admin123') ||
+                        (emailVal === 'community@carepath.com' && passVal === 'password123')) {
+                        
+                        showToast('Welcome back!', 'Login successful. Redirecting...', 'success');
+                        
+                        // Redirect based on role
+                        setTimeout(() => {
+                            if (emailVal === 'admin@carepath.com') {
+                                window.location.href = 'admin/dashboard.html';
+                            } else if (emailVal === 'caregiver@carepath.com') {
+                                window.location.href = 'caregiver/dashboard.html';
+                            } else {
+                                window.location.href = 'index.html';
+                            }
+                        }, 1500);
+                    } else {
+                        showToast('Login failed', 'Invalid email or password. Please try again.', 'error');
+                        // Shake the form
+                        document.querySelector('.login-card').style.animation = 'shake 0.5s ease';
+                        setTimeout(() => {
+                            document.querySelector('.login-card').style.animation = '';
+                        }, 500);
+                    }
+                }, 1500);
+            } else {
+                // Scroll to first error
+                const firstError = document.querySelector('.form-control.error');
+                if (firstError) {
+                    firstError.focus();
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+
+        // ============================================================
+        // REAL-TIME VALIDATION
+        // ============================================================
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.classList.contains('error')) {
+                    this.classList.remove('error');
+                    const errorEl = this.parentElement.querySelector('.form-error');
+                    if (errorEl) errorEl.classList.remove('visible');
+                }
+            });
+            
+            input.addEventListener('blur', function() {
+                // Quick validation on blur
+                if (this.id === 'loginEmail') {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (this.value.trim() && !emailRegex.test(this.value.trim())) {
+                        this.classList.add('error');
+                        const errorEl = document.getElementById('emailError');
+                        if (errorEl) errorEl.classList.add('visible');
+                    }
+                }
+                if (this.id === 'loginPassword') {
+                    if (this.value.trim() && this.value.trim().length < 6) {
+                        this.classList.add('error');
+                        const errorEl = document.getElementById('passwordError');
+                        if (errorEl) errorEl.classList.add('visible');
+                    }
+                }
+            });
+        });
+
+        // ============================================================
+        // FORGOT PASSWORD
+        // ============================================================
+        document.getElementById('forgotPassword').addEventListener('click', function(e) {
+            e.preventDefault();
+            showToast('Password Reset', 'Password reset instructions will be sent to your email.', 'info');
+        });
+
+        // ============================================================
+        // DEMO CREDENTIALS CLICK TO FILL
+        // ============================================================
+        document.getElementById('demoCaregiver').addEventListener('click', function() {
+            document.getElementById('loginEmail').value = 'caregiver@carepath.com';
+            document.getElementById('loginPassword').value = 'password123';
+            showToast('Demo Credentials', 'Caregiver credentials filled in. Click Sign In.', 'info');
+        });
+
+        document.getElementById('demoAdmin').addEventListener('click', function() {
+            document.getElementById('loginEmail').value = 'admin@carepath.com';
+            document.getElementById('loginPassword').value = 'admin123';
+            showToast('Demo Credentials', 'Admin credentials filled in. Click Sign In.', 'info');
+        });
+
+        // ============================================================
+        // KEYBOARD NAVIGATION
+        // ============================================================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+            }
+        });
+
+        // ============================================================
+        // CONSOLE LOG
+        // ============================================================
+        console.log('%c🛡️ CarePath - Login Page', 'font-size: 24px; font-weight: bold; color: #87CEEB;');
+        console.log('%cWelcome back! Sign in to your account.', 'font-size: 14px; color: #4a5a6a;');
+       console.log('%c📝 Demo: caregiver@carepath.com / password123', 'font-size: 14px; color: #d97706;');
+        console.log('✅ Page loaded successfully!');
+
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
+        
+        try {
+            const result = await api.login({ email, password });
+            if (result.success) {
+                localStorage.setItem('carepath_user', JSON.stringify(result.data));
+                showToast('✅ Login successful!', 'success');
+                setTimeout(() => {
+                    window.location.href = '../caregiver/dashboard.html';
+                }, 1500);
+            }
+        } catch (error) {
+            showToast('❌ ' + error.message, 'error');
+        }
+    });
+
+    </script>
+
+</body>
+</html>

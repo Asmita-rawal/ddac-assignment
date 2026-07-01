@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Manage Cases - CarePath Admin</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    
+    <style>
+        /* ============================================================
+           CSS VARIABLES & RESET
+           ============================================================ */
+        :root {
+            --primary: #87CEEB;
+            --primary-dark: #5BA3C9;
+            --primary-light: #D4EEF7;
+            --secondary: #90EE90;
+            --secondary-dark: #6BCB6B;
+            --secondary-light: #D4F5D4;
+            --white: #FFFFFF;
+            --off-white: #F8F9FA;
+            --off-white-dark: #E9ECEF;
+            --text-dark: #1a2a3a;
+            --text-gray: #6B7A8A;
+            --text-muted: #4a5a6a;
+            --shadow: 0 10px 40px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 60px rgba(0,0,0,0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --nav-bg: rgba(255,255,255,0.92);
+            --card-bg: rgba(255,255,255,0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--off-white);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: linear-gradient(135deg, var(--off-white) 0%, var(--primary-light) 50%, var(--secondary-light) 100%);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* ===== Background Decor ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -40%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(135,206,235,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatBg 10s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -30%;
+            left: -15%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(144,238,144,0.10) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatBgReverse 12s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-25px) scale(1.05); }
+        }
+        @keyframes floatBgReverse {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(25px) scale(1.05); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           UTILITY CLASSES
+           ============================================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+        .flex {
+            display: flex;
+            align-items: center;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+        .gap-1 { gap: 8px; }
+        .gap-2 { gap: 12px; }
+        .gap-3 { gap: 16px; }
+        .mt-2 { margin-top: 12px; }
+        .mt-3 { margin-top: 20px; }
+        .mt-4 { margin-top: 32px; }
+        .mb-3 { margin-bottom: 20px; }
+        .mb-4 { margin-bottom: 32px; }
+        .mb-5 { margin-bottom: 40px; }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 800;
+        }
+        .section-divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            margin: 6px 0 8px;
+        }
+        .section-subtitle {
+            color: var(--text-gray);
+            font-size: 15px;
+        }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 22px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            min-height: 42px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 16px rgba(135,206,235,0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(135,206,235,0.4);
+        }
+        .btn-secondary {
+            background: var(--white);
+            color: var(--text-dark);
+            border: 2px solid var(--off-white-dark);
+        }
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--text-dark);
+            border: 2px solid var(--off-white-dark);
+        }
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 13px;
+            min-height: 34px;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        /* ============================================================
+           NAVBAR
+           ============================================================ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+        .navbar-brand img {
+            height: 36px;
+            width: 36px;
+            object-fit: contain;
+        }
+        .navbar-brand span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            font-size: 14px;
+            margin-left: 2px;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            font-size: 14px;
+            transition: var(--transition);
+            padding: 6px 0;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: var(--transition);
+        }
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        .nav-links a.active {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+        .nav-links a:hover {
+            color: var(--text-dark);
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+        .hamburger span {
+            width: 26px;
+            height: 3px;
+            background: var(--text-dark);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* ============================================================
+           STAT CARDS
+           ============================================================ */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .card-stat {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--radius-sm);
+            padding: 20px 24px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            transition: var(--transition);
+        }
+        .card-stat:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+        .card-stat .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        .card-stat .stat-label {
+            font-size: 14px;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+        .card-stat.green { border-left-color: var(--secondary-dark); }
+        .card-stat.gold { border-left-color: #F39C12; }
+        .card-stat.red { border-left-color: #E74C3C; }
+
+        /* ============================================================
+           SEARCH BAR
+           ============================================================ */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--white);
+            border: 2px solid var(--off-white-dark);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            transition: var(--transition);
+            max-width: 400px;
+            width: 100%;
+        }
+        .search-bar:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(135,206,235,0.12);
+        }
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 10px 16px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            background: transparent;
+            color: var(--text-dark);
+            min-width: 120px;
+        }
+        .search-bar input::placeholder {
+            color: var(--text-gray);
+            opacity: 0.7;
+        }
+        .search-bar button {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--text-gray);
+            transition: var(--transition);
+        }
+        .search-bar button:hover {
+            color: var(--primary-dark);
+        }
+
+        .form-control {
+            padding: 8px 14px;
+            border: 2px solid var(--off-white-dark);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 14px;
+            background: var(--white);
+            color: var(--text-dark);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(135,206,235,0.12);
+        }
+
+        /* ============================================================
+           CASE CARDS
+           ============================================================ */
+        .case-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: var(--transition);
+            border: 1px solid rgba(255,255,255,0.5);
+            animation: fadeInUp 0.5s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        .case-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: var(--off-white-dark);
+        }
+        .case-body {
+            padding: 16px 18px;
+            flex: 1;
+        }
+        .case-body h3 {
+            font-size: 17px;
+            font-weight: 700;
+        }
+        .case-meta {
+            font-size: 13px;
+            color: var(--text-gray);
+            margin: 4px 0 8px;
+        }
+        .case-description {
+            font-size: 14px;
+            color: var(--text-gray);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .case-footer {
+            padding: 12px 18px;
+            border-top: 1px solid var(--off-white-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: rgba(248,249,250,0.5);
+        }
+
+        /* ===== Status Badges ===== */
+        .case-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .case-status.active {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+        .case-status.active::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10b981;
+            display: inline-block;
+        }
+        .case-status.urgent {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+        .case-status.urgent::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ef4444;
+            display: inline-block;
+            animation: pulse-dot 1.5s infinite;
+        }
+        .case-status.found {
+            background: #eff6ff;
+            color: #1e40af;
+        }
+        .case-status.found::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #3b82f6;
+            display: inline-block;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+        }
+
+        /* ===== Badges ===== */
+        .badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-warning {
+            background: #fffbeb;
+            color: #92400e;
+        }
+        .badge-danger {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+        .badge-success {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        /* ============================================================
+           PAGINATION
+           ============================================================ */
+        .pagination {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .pagination .btn {
+            min-width: 40px;
+            justify-content: center;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .footer {
+            margin-top: auto;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255,255,255,0.3);
+            padding: 36px 0 20px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        .footer .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 32px;
+        }
+        .footer h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+        .footer p {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+        .footer ul {
+            list-style: none;
+        }
+        .footer ul li {
+            margin-bottom: 4px;
+        }
+        .footer ul a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        .footer ul a:hover {
+            color: var(--text-dark);
+        }
+        .footer-bottom {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--off-white-dark);
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 992px) {
+            .grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .footer .container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(255,255,255,0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 24px 20px;
+                gap: 12px;
+                transform: translateY(-120%);
+                transition: var(--transition);
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+                align-items: stretch;
+                text-align: center;
+            }
+            .nav-links.open {
+                transform: translateY(0);
+            }
+            .nav-links .btn {
+                justify-content: center;
+            }
+
+            .container {
+                padding: 0 16px;
+            }
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .section-title {
+                font-size: 22px;
+            }
+            .card-stat .stat-number {
+                font-size: 22px;
+            }
+            .footer .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                text-align: center;
+            }
+            .flex-between {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            .search-bar {
+                max-width: 100%;
+            }
+            .case-image {
+                height: 140px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .card-stat {
+                padding: 14px 16px;
+            }
+            .card-stat .stat-number {
+                font-size: 20px;
+            }
+            .card-stat .stat-label {
+                font-size: 12px;
+            }
+            .case-body {
+                padding: 12px 14px;
+            }
+            .case-footer {
+                padding: 10px 14px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn {
+                font-size: 13px;
+                padding: 8px 16px;
+                min-height: 38px;
+            }
+        }
+
+        @media (max-height: 600px) and (orientation: landscape) {
+            .navbar {
+                padding: 6px 0;
+            }
+            .navbar-brand img {
+                height: 28px;
+                width: 28px;
+            }
+            .navbar-brand {
+                font-size: 18px;
+            }
+            .page-wrapper {
+                padding-top: 60px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        @media print {
+            .navbar, .footer { display: none; }
+            .case-card { break-inside: avoid; border: 1px solid #ddd; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================
+NAVBAR
+============================================================ -->
+<nav class="navbar" id="navbar">
+    <div class="container">
+        <a href="dashboard.html" class="navbar-brand">
+            <i class="fas fa-shield-alt" style="color: var(--primary); font-size: 28px;"></i>
+            CarePath
+            <span>Admin</span>
+        </a>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="manage-users.html">Users</a></li>
+            <li><a href="manage-cases.html" class="active">Cases</a></li>
+            <li><a href="manage-reports.html">Reports</a></li>
+            <li><a href="manage-sightings.html">Sightings</a></li>
+            <li><a href="analytics.html">Analytics</a></li>
+            <li><a href="../index.html" class="btn btn-danger btn-sm">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ============================================================
+MAIN CONTENT
+============================================================ -->
+<main style="padding-top: 85px; flex: 1; position: relative; z-index: 1;">
+
+    <section class="container mb-5">
+        <!-- Header -->
+        <div class="flex-between">
+            <div>
+                <h2 class="section-title">Manage <span class="highlight">Cases</span></h2>
+                <div class="section-divider" style="margin-left: 0;"></div>
+                <p class="section-subtitle">Review, update, and manage all missing person cases</p>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn btn-secondary" onclick="addCase()"><i class="fas fa-plus"></i> Add Case</button>
+                <button class="btn btn-outline" onclick="exportCases()"><i class="fas fa-download"></i> Export</button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="dashboard-grid mt-3">
+            <div class="card-stat">
+                <div class="stat-number" id="activeCount">156</div>
+                <div class="stat-label">Active Cases</div>
+            </div>
+            <div class="card-stat green">
+                <div class="stat-number" id="resolvedCount">89</div>
+                <div class="stat-label">Resolved Cases</div>
+            </div>
+            <div class="card-stat gold">
+                <div class="stat-number" id="urgentCount">12</div>
+                <div class="stat-label">Urgent Cases</div>
+            </div>
+            <div class="card-stat red">
+                <div class="stat-number" id="pendingCount">23</div>
+                <div class="stat-label">Pending Review</div>
+            </div>
+        </div>
+
+        <!-- Search & Filter -->
+        <div class="flex-between mt-3" style="gap: 12px;">
+            <div class="search-bar">
+                <input type="text" placeholder="Search cases..." id="searchCases" />
+                <button onclick="searchCases()"><i class="fas fa-search"></i></button>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <select class="form-control" id="statusFilter" onchange="filterCases()">
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="urgent">Urgent</option>
+                    <option value="found">Found</option>
+                    <option value="resolved">Resolved</option>
+                </select>
+                <select class="form-control" id="priorityFilter" onchange="filterCases()">
+                    <option value="">All Priority</option>
+                    <option value="critical">Critical</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Cases Grid -->
+        <div class="grid-3 mt-3" id="casesGrid">
+            <!-- Case cards will be rendered by JavaScript -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex-center mt-3 pagination" id="pagination">
+            <button class="btn btn-outline btn-sm" id="prevPage" disabled><i class="fas fa-chevron-left"></i></button>
+            <button class="btn btn-primary btn-sm" data-page="1">1</button>
+            <button class="btn btn-outline btn-sm" data-page="2">2</button>
+            <button class="btn btn-outline btn-sm" data-page="3">3</button>
+            <button class="btn btn-outline btn-sm" id="nextPage"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+</main>
+
+<!-- ============================================================
+FOOTER
+============================================================ -->
+<footer class="footer">
+    <div class="container">
+        <div>
+            <h4><i class="fas fa-shield-alt" style="color: var(--primary);"></i> CarePath</h4>
+            <p>Admin Panel - Manage the platform and help reunite families.</p>
+        </div>
+        <div>
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="manage-users.html">Users</a></li>
+                <li><a href="manage-cases.html">Cases</a></li>
+                <li><a href="manage-reports.html">Reports</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>Support</h4>
+            <ul>
+                <li><a href="mailto:admin@CarePath.com">admin@CarePath.com</a></li>
+                <li><a href="tel:+11234567890">+1 (123) 456-7890</a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 CarePath. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<!-- ============================================================
+SCRIPTS
+============================================================ -->
+<script>
+    // ============================================================
+    // HAMBURGER TOGGLE
+    // ============================================================
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', function() {
+        this.classList.toggle('active');
+        navLinks.classList.toggle('open');
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('open');
+        });
+    });
+
+    // ============================================================
+    // CASE DATA
+    // ============================================================
+    const casesData = [
+        {
+            id: 1,
+            name: 'Robert Johnson',
+            age: 72,
+            missingSince: 'Jun 20, 2025',
+            lastSeen: 'Downtown area',
+            description: 'Suffers from Alzheimer\'s. Last seen wearing a blue jacket.',
+            status: 'active',
+            priority: 'medium',
+            caregiver: 'Sarah Johnson',
+            sightings: 3,
+            foundDate: null,
+            image: 'https://ui-avatars.com/api/?name=Robert+Johnson&size=300&background=87CEEB&color=fff&bold=true'
+        },
+        {
+            id: 2,
+            name: 'Maria Garcia',
+            age: 78,
+            missingSince: 'Jun 22, 2025',
+            lastSeen: 'Riverside Park',
+            description: 'Needs immediate medication. Diabetic and hypertensive.',
+            status: 'urgent',
+            priority: 'critical',
+            caregiver: 'John Caregiver',
+            sightings: 5,
+            foundDate: null,
+            image: 'https://ui-avatars.com/api/?name=Maria+Garcia&size=300&background=E74C3C&color=fff&bold=true'
+        },
+        {
+            id: 3,
+            name: 'James Thompson',
+            age: 65,
+            missingSince: 'Jun 18, 2025',
+            lastSeen: 'Oakwood Mall',
+            description: 'Located safe and sound. Reunited with family.',
+            status: 'found',
+            priority: 'medium',
+            caregiver: 'Emily Thompson',
+            sightings: 8,
+            foundDate: 'Jun 20, 2025',
+            image: 'https://ui-avatars.com/api/?name=James+Thompson&size=300&background=90EE90&color=fff&bold=true'
+        },
+        {
+            id: 4,
+            name: 'Patricia Williams',
+            age: 81,
+            missingSince: 'Jun 23, 2025',
+            lastSeen: 'Sunset Nursing Home',
+            description: 'Wandered away from facility. Wearing a floral dress.',
+            status: 'active',
+            priority: 'high',
+            caregiver: 'Nursing Home Staff',
+            sightings: 2,
+            foundDate: null,
+            image: 'https://ui-avatars.com/api/?name=Patricia+Williams&size=300&background=F39C12&color=fff&bold=true'
+        },
+        {
+            id: 5,
+            name: 'George Martinez',
+            age: 69,
+            missingSince: 'Jun 19, 2025',
+            lastSeen: 'Central Bus Station',
+            description: 'Disoriented due to dementia. Family extremely worried.',
+            status: 'urgent',
+            priority: 'critical',
+            caregiver: 'Linda Martinez',
+            sightings: 4,
+            foundDate: null,
+            image: 'https://ui-avatars.com/api/?name=George+Martinez&size=300&background=E74C3C&color=fff&bold=true'
+        },
+        {
+            id: 6,
+            name: 'Eleanor Davis',
+            age: 74,
+            missingSince: 'Jun 15, 2025',
+            lastSeen: 'Community Center',
+            description: 'Went for a walk and didn\'t return. Known to wander.',
+            status: 'resolved',
+            priority: 'low',
+            caregiver: 'Robert Davis',
+            sightings: 10,
+            foundDate: 'Jun 17, 2025',
+            image: 'https://ui-avatars.com/api/?name=Eleanor+Davis&size=300&background=6BCB6B&color=fff&bold=true'
+        }
+    ];
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    let currentPage = 1;
+    const itemsPerPage = 6;
+    let filteredData = [...casesData];
+
+    // ============================================================
+    // RENDER CASES
+    // ============================================================
+    function renderCases() {
+        const grid = document.getElementById('casesGrid');
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageItems = filteredData.slice(start, end);
+
+        if (pageItems.length === 0) {
+            grid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-gray);">
+                    <i class="fas fa-inbox" style="font-size: 48px; display: block; margin-bottom: 12px; opacity: 0.5;"></i>
+                    <h3 style="font-weight: 600;">No cases found</h3>
+                    <p>Try adjusting your search or filters</p>
+                </div>
+            `;
+            updatePagination();
+            return;
+        }
+
+        grid.innerHTML = pageItems.map(caseItem => {
+            const statusClass = caseItem.status;
+            const priorityColors = {
+                critical: 'badge-danger',
+                high: 'badge-warning',
+                medium: 'badge-warning',
+                low: 'badge-success'
+            };
+            const priorityLabel = caseItem.priority.charAt(0).toUpperCase() + caseItem.priority.slice(1);
+            const statusLabel = caseItem.status.charAt(0).toUpperCase() + caseItem.status.slice(1);
+            const isUrgent = caseItem.status === 'urgent';
+            const borderStyle = isUrgent ? 'border: 2px solid #E74C3C;' : '';
+
+            return `
+                <div class="case-card" data-status="${caseItem.status}" data-priority="${caseItem.priority}" style="${borderStyle}">
+                    <img src="${caseItem.image}" alt="${caseItem.name}" class="case-image" />
+                    <div class="case-body">
+                        <div class="flex-between">
+                            <h3>${caseItem.name}</h3>
+                            <span class="case-status ${statusClass}">${statusLabel}</span>
+                        </div>
+                        <div class="case-meta">Age: ${caseItem.age} • Missing since: ${caseItem.missingSince}</div>
+                        <p class="case-description">${caseItem.description}</p>
+                        <div style="margin-top: 8px;">
+                            <span class="badge ${priorityColors[caseItem.priority]}">${priorityLabel} Priority</span>
+                            <span style="font-size: 12px; color: var(--text-gray); margin-left: 8px;">${caseItem.sightings} sightings</span>
+                            ${caseItem.foundDate ? `<span style="font-size: 12px; color: var(--secondary-dark); margin-left: 8px;">Found ${caseItem.foundDate}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="case-footer">
+                        <span style="font-size: 13px; color: var(--text-gray);">Caregiver: ${caseItem.caregiver}</span>
+                        <div class="flex" style="gap: 4px;">
+                            <button class="btn btn-outline btn-sm" onclick="editCase(${caseItem.id})"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-primary btn-sm" onclick="viewCase(${caseItem.id})">View</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        updatePagination();
+    }
+
+    // ============================================================
+    // UPDATE PAGINATION
+    // ============================================================
+    function updatePagination() {
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+        const prevBtn = document.getElementById('prevPage');
+        const nextBtn = document.getElementById('nextPage');
+        const pageButtons = document.querySelectorAll('#pagination .btn[data-page]');
+
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+
+        pageButtons.forEach(btn => {
+            const page = parseInt(btn.dataset.page);
+            btn.classList.remove('active', 'btn-primary', 'btn-outline');
+            btn.classList.add(page === currentPage ? 'btn-primary' : 'btn-outline');
+        });
+
+        // Show/hide page buttons based on total pages
+        pageButtons.forEach(btn => {
+            const page = parseInt(btn.dataset.page);
+            btn.style.display = page <= totalPages ? 'inline-flex' : 'none';
+        });
+    }
+
+    // ============================================================
+    // SEARCH & FILTER
+    // ============================================================
+    function searchCases() {
+        applyFilters();
+    }
+
+    function filterCases() {
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const query = document.getElementById('searchCases').value.toLowerCase().trim();
+        const status = document.getElementById('statusFilter').value;
+        const priority = document.getElementById('priorityFilter').value;
+
+        filteredData = casesData.filter(item => {
+            const matchSearch = item.name.toLowerCase().includes(query) ||
+                               item.caregiver.toLowerCase().includes(query) ||
+                               item.lastSeen.toLowerCase().includes(query) ||
+                               item.description.toLowerCase().includes(query);
+            const matchStatus = status === '' || item.status === status;
+            const matchPriority = priority === '' || item.priority === priority;
+            return matchSearch && matchStatus && matchPriority;
+        });
+
+        currentPage = 1;
+        renderCases();
+
+        // Update stats based on filtered data
+        updateStats();
+    }
+
+    // ============================================================
+    // UPDATE STATS
+    // ============================================================
+    function updateStats() {
+        document.getElementById('activeCount').textContent = casesData.filter(c => c.status === 'active' || c.status === 'urgent').length;
+        document.getElementById('resolvedCount').textContent = casesData.filter(c => c.status === 'found' || c.status === 'resolved').length;
+        document.getElementById('urgentCount').textContent = casesData.filter(c => c.status === 'urgent').length;
+        document.getElementById('pendingCount').textContent = casesData.filter(c => c.status === 'active').length;
+    }
+
+    // ============================================================
+    // PAGINATION BUTTONS
+    // ============================================================
+    document.querySelectorAll('#pagination .btn[data-page]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const page = parseInt(this.dataset.page);
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                renderCases();
+            }
+        });
+    });
+
+    document.getElementById('prevPage').addEventListener('click', function() {
+        if (currentPage > 1) {
+            currentPage--;
+            renderCases();
+        }
+    });
+
+    document.getElementById('nextPage').addEventListener('click', function() {
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderCases();
+        }
+    });
+
+    // ============================================================
+    // ACTION FUNCTIONS
+    // ============================================================
+    function addCase() {
+        alert('📋 Opening Add Case form...\nIn production, this would open a modal or navigate to a new page.');
+    }
+
+    function exportCases() {
+        alert('📤 Exporting cases data...\nIn production, this would download a CSV/PDF report.');
+    }
+
+    function editCase(id) {
+        const caseItem = casesData.find(c => c.id === id);
+        alert(`✏️ Editing case: ${caseItem ? caseItem.name : 'Unknown'}\nIn production, this would open the edit form.`);
+    }
+
+    function viewCase(id) {
+        const caseItem = casesData.find(c => c.id === id);
+        alert(`📄 Viewing case: ${caseItem ? caseItem.name : 'Unknown'}\nIn production, this would open the case details page.`);
+    }
+
+    // ============================================================
+    // SEARCH ON ENTER KEY
+    // ============================================================
+    document.getElementById('searchCases').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            searchCases();
+        }
+    });
+
+    // ============================================================
+    // PREVENT ZOOM ON DOUBLE TAP (iOS)
+    // ============================================================
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) e.preventDefault();
+        lastTouchEnd = now;
+    }, false);
+
+    // ============================================================
+    // VIEWPORT HEIGHT FOR MOBILE
+    // ============================================================
+    function setVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+    }
+    setVH();
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', () => setTimeout(setVH, 200));
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    updateStats();
+    renderCases();
+</script>
+
+</body>
+</html>

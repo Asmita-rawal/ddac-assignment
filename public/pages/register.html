@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Register - CarePath</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    
+    <style>
+        /* ===== CSS Variables ===== */
+        :root {
+            --sky-blue: #87CEEB;
+            --sky-blue-dark: #5BA3C9;
+            --sky-blue-light: #D4EEF7;
+            --light-green: #90EE90;
+            --light-green-dark: #6BCB6B;
+            --light-green-light: #D4F5D4;
+            --off-white: #F8F9FA;
+            --off-white-dark: #E9ECEF;
+            --white: #FFFFFF;
+            --text-dark: #1a2a3a;
+            --text-muted: #4a5a6a;
+            --shadow: 0 10px 40px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 60px rgba(0,0,0,0.12);
+            --radius: 20px;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --danger: #dc2626;
+            --success: #16a34a;
+            --warning: #d97706;
+        }
+
+        /* ===== Reset & Base ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--off-white);
+            color: var(--text-dark);
+            line-height: 1.7;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--off-white) 0%, var(--sky-blue-light) 50%, var(--light-green-light) 100%);
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* ===== Background Animations ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -40%;
+            right: -20%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(135,206,235,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -30%;
+            left: -15%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(144,238,144,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatReverse 10s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-30px) scale(1.05); }
+        }
+        @keyframes floatReverse {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(30px) scale(1.05); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes successBounce {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+
+        /* ===== Page Wrapper ===== */
+        .page-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        /* ===== Register Container ===== */
+        .register-container {
+            width: 100%;
+            max-width: 520px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            padding: 48px 40px;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.5);
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s ease;
+            margin: 10px 0;
+            max-height: none;
+            overflow-y: visible;
+        }
+
+        /* ===== Header ===== */
+        .register-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .register-header .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-decoration: none;
+            margin-bottom: 8px;
+        }
+        .register-header .logo i {
+            color: var(--sky-blue);
+            font-size: 34px;
+            animation: float 3s ease-in-out infinite;
+        }
+        .register-header .logo span {
+            background: linear-gradient(135deg, var(--sky-blue), var(--light-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .register-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .register-header p {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-top: 4px;
+        }
+
+        /* ===== Progress Steps ===== */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 32px;
+            position: relative;
+        }
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background: var(--off-white-dark);
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+        .progress-steps .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+            z-index: 1;
+            cursor: default;
+        }
+        .progress-steps .step .circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--off-white-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-muted);
+            transition: var(--transition);
+            border: 3px solid transparent;
+        }
+        .progress-steps .step.active .circle {
+            background: linear-gradient(135deg, var(--sky-blue), var(--light-green));
+            color: white;
+            border-color: var(--sky-blue);
+            box-shadow: 0 4px 20px rgba(135, 206, 235, 0.4);
+        }
+        .progress-steps .step.completed .circle {
+            background: var(--light-green-dark);
+            color: white;
+            border-color: var(--light-green-dark);
+        }
+        .progress-steps .step .label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+        .progress-steps .step.active .label {
+            color: var(--text-dark);
+        }
+        .progress-steps .step.completed .label {
+            color: var(--light-green-dark);
+        }
+
+        /* ===== Forms ===== */
+        .register-step {
+            display: none;
+            animation: fadeInUp 0.4s ease;
+        }
+        .register-step.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: var(--text-dark);
+        }
+        .form-group label .required {
+            color: var(--danger);
+        }
+        .form-group .input-wrapper {
+            position: relative;
+        }
+        .form-group .input-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 16px;
+            transition: var(--transition);
+            pointer-events: none;
+            z-index: 2;
+        }
+        .form-group .input-wrapper input,
+        .form-group .input-wrapper select {
+            width: 100%;
+            padding: 14px 18px 14px 48px;
+            border: 2px solid var(--off-white-dark);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 15px;
+            transition: var(--transition);
+            background: var(--off-white);
+            color: var(--text-dark);
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        .form-group .input-wrapper select {
+            padding-right: 40px;
+            cursor: pointer;
+        }
+        .form-group .input-wrapper select + i.fa-chevron-down {
+            right: 16px;
+            left: auto;
+            font-size: 14px;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .form-group .input-wrapper input:focus,
+        .form-group .input-wrapper select:focus {
+            outline: none;
+            border-color: var(--sky-blue);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(135, 206, 235, 0.15);
+        }
+        .form-group .input-wrapper input:focus ~ i,
+        .form-group .input-wrapper select:focus ~ i {
+            color: var(--sky-blue);
+        }
+        .form-group .input-wrapper input::placeholder {
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        .form-group .helper-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .form-group .helper-text.error {
+            color: var(--danger);
+        }
+        .form-group .helper-text.success {
+            color: var(--light-green-dark);
+        }
+
+        /* ===== Password Strength ===== */
+        .password-strength {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .password-strength .bar {
+            flex: 1;
+            height: 4px;
+            border-radius: 4px;
+            background: var(--off-white-dark);
+            transition: var(--transition);
+        }
+        .password-strength .bar.weak { background: var(--danger); }
+        .password-strength .bar.medium { background: var(--warning); }
+        .password-strength .bar.strong { background: var(--light-green-dark); }
+
+        .password-text {
+            font-size: 12px;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+        .password-text.weak { color: var(--danger); }
+        .password-text.medium { color: var(--warning); }
+        .password-text.strong { color: var(--light-green-dark); }
+
+        /* ===== Toggle Password ===== */
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 8px;
+            transition: var(--transition);
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+        }
+        .toggle-password:hover {
+            color: var(--text-dark);
+        }
+        .toggle-password:active {
+            transform: translateY(-50%) scale(0.9);
+        }
+
+        /* ===== Buttons ===== */
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--sky-blue), var(--light-green));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            min-height: 56px;
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(135, 206, 235, 0.4);
+        }
+        .btn-primary:active:not(:disabled) {
+            transform: scale(0.97);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .btn-primary .btn-text {
+            transition: var(--transition);
+        }
+        .btn-primary .btn-icon {
+            transition: var(--transition);
+        }
+        .btn-primary:hover:not(:disabled) .btn-icon {
+            transform: translateX(6px);
+        }
+        .btn-primary.loading .btn-text {
+            opacity: 0;
+        }
+        .btn-primary.loading .btn-icon {
+            animation: spin 0.8s linear infinite;
+        }
+        .btn-primary.loading {
+            pointer-events: none;
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 14px;
+            background: var(--white);
+            color: var(--text-dark);
+            border: 2px solid var(--off-white-dark);
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            min-height: 48px;
+        }
+        .btn-secondary:hover {
+            border-color: var(--sky-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        .btn-secondary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .btn-group .btn-primary {
+            flex: 2;
+        }
+        .btn-group .btn-secondary {
+            flex: 1;
+        }
+
+        /* ===== Divider ===== */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 24px 0;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--off-white-dark);
+        }
+
+        /* ===== Social Login ===== */
+        .social-login {
+            display: flex;
+            gap: 12px;
+        }
+        .social-login button {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--off-white-dark);
+            border-radius: 12px;
+            background: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-dark);
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            min-height: 48px;
+        }
+        .social-login button:hover {
+            border-color: var(--sky-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        .social-login button:active {
+            transform: scale(0.97);
+        }
+        .social-login button i {
+            font-size: 18px;
+        }
+        .social-login button.google i { color: #ea4335; }
+        .social-login button.facebook i { color: #1877f2; }
+
+        /* ===== Login Link ===== */
+        .login-link {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        .login-link a {
+            color: var(--sky-blue-dark);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            padding: 4px 0;
+        }
+        .login-link a:hover {
+            color: var(--text-dark);
+            text-decoration: underline;
+        }
+
+        /* ===== Error Message ===== */
+        .error-message {
+            display: none;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: var(--danger);
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            align-items: center;
+            gap: 10px;
+            animation: shake 0.4s ease;
+        }
+        .error-message.show {
+            display: flex;
+        }
+        .error-message i {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        /* ===== Success Message ===== */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+            animation: successBounce 0.6s ease;
+        }
+        .success-message.show {
+            display: block;
+        }
+        .success-message i {
+            font-size: 70px;
+            color: var(--light-green-dark);
+            margin-bottom: 16px;
+            animation: float 2s ease-in-out infinite;
+        }
+        .success-message h3 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        .success-message p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+        .success-message .btn-primary {
+            margin-top: 24px;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 32px;
+        }
+
+        /* ===== Toast Notification ===== */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 380px;
+            width: 100%;
+        }
+        .toast {
+            background: var(--text-dark);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: fadeInUp 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+        .toast.warning {
+            border-left: 4px solid var(--warning);
+        }
+        .toast .toast-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .toast .toast-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0 4px;
+            transition: var(--transition);
+        }
+        .toast .toast-close:hover {
+            color: white;
+        }
+        .toast.removing {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 0.4s ease;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 520px) {
+            .register-container {
+                padding: 24px 18px;
+                border-radius: 16px;
+                margin: 4px 0;
+                max-width: 100%;
+            }
+            .register-header .logo {
+                font-size: 22px;
+            }
+            .register-header .logo i {
+                font-size: 24px;
+            }
+            .register-header h2 {
+                font-size: 20px;
+            }
+            .register-header p {
+                font-size: 14px;
+            }
+            .form-group .input-wrapper input,
+            .form-group .input-wrapper select {
+                padding: 11px 12px 11px 38px;
+                font-size: 14px;
+                min-height: 44px;
+            }
+            .progress-steps {
+                gap: 16px;
+            }
+            .progress-steps .step .circle {
+                width: 32px;
+                height: 32px;
+                font-size: 11px;
+            }
+            .progress-steps .step .label {
+                font-size: 9px;
+            }
+            .btn-primary {
+                font-size: 15px;
+                padding: 13px;
+                min-height: 46px;
+            }
+            .btn-secondary {
+                font-size: 14px;
+                padding: 11px;
+                min-height: 40px;
+            }
+            .btn-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .btn-group .btn-primary,
+            .btn-group .btn-secondary {
+                flex: 1;
+                width: 100%;
+            }
+            .social-login {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .social-login button {
+                width: 100%;
+            }
+            .toast-container {
+                bottom: 12px;
+                right: 12px;
+                max-width: 90%;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .register-container {
+                padding: 18px 12px;
+            }
+            .register-header .logo {
+                font-size: 20px;
+            }
+            .register-header h2 {
+                font-size: 18px;
+            }
+            .form-group .input-wrapper input,
+            .form-group .input-wrapper select {
+                font-size: 13px;
+                min-height: 40px;
+                padding: 10px 10px 10px 34px;
+            }
+            .progress-steps .step .circle {
+                width: 28px;
+                height: 28px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== TOAST CONTAINER ===== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ===== PAGE WRAPPER ===== -->
+<div class="page-wrapper">
+
+    <!-- ===== REGISTER CONTAINER ===== -->
+    <div class="register-container" id="registerContainer">
+
+        <!-- ===== Header ===== -->
+        <div class="register-header">
+            <a href="index.html" class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>CarePath</span>
+            </a>
+            <h2>Create Your Account</h2>
+            <p>Join CarePath and start protecting your loved ones</p>
+        </div>
+
+        <!-- ===== Progress Steps ===== -->
+        <div class="progress-steps" id="progressSteps">
+            <div class="step active" data-step="1">
+                <div class="circle">1</div>
+                <span class="label">Personal</span>
+            </div>
+            <div class="step" data-step="2">
+                <div class="circle">2</div>
+                <span class="label">Account</span>
+            </div>
+            <div class="step" data-step="3">
+                <div class="circle">3</div>
+                <span class="label">Confirm</span>
+            </div>
+        </div>
+
+        <!-- ===== Error Message ===== -->
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorText">Please fill in all required fields.</span>
+        </div>
+
+        <!-- ===== STEP 1: Personal Information ===== -->
+        <div class="register-step active" data-step="1" id="step1">
+            <form id="step1Form" novalidate>
+                <div class="form-group">
+                    <label for="fullName">Full Name <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input 
+                            type="text" 
+                            id="fullName" 
+                            placeholder="John Doe" 
+                            required 
+                            autocomplete="name"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            placeholder="john@example.com" 
+                            required 
+                            autocomplete="email"
+                            inputmode="email"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-phone"></i>
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            placeholder="+1 (234) 567-8900" 
+                            autocomplete="tel"
+                            inputmode="numeric"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="role">I am a <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-users"></i>
+                        <select id="role" required>
+                            <option value="">Select your role...</option>
+                            <option value="caregiver">Caregiver</option>
+                            <option value="family">Family Member</option>
+                            <option value="elderly">Senior / Elderly</option>
+                            <option value="professional">Healthcare Professional</option>
+                            <option value="volunteer">Volunteer</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary" id="step1Btn">
+                    <span class="btn-text">Continue</span>
+                    <i class="fas fa-arrow-right btn-icon"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- ===== STEP 2: Account Setup ===== -->
+        <div class="register-step" data-step="2" id="step2">
+            <form id="step2Form" novalidate>
+                <div class="form-group">
+                    <label for="password">Password <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            placeholder="Min 8 characters" 
+                            required 
+                            autocomplete="new-password"
+                            minlength="8"
+                        />
+                        <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <div class="password-text" id="passwordText">Password must be at least 8 characters</div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-check-circle"></i>
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            placeholder="Confirm your password" 
+                            required 
+                            autocomplete="new-password"
+                            minlength="8"
+                        />
+                    </div>
+                    <div class="helper-text" id="confirmHelper">Passwords must match</div>
+                </div>
+                <div class="form-group">
+                    <label for="securityQuestion">Security Question <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-question-circle"></i>
+                        <select id="securityQuestion" required>
+                            <option value="">Select a question...</option>
+                            <option value="pet">What is your pet's name?</option>
+                            <option value="mother">What is your mother's maiden name?</option>
+                            <option value="city">What city were you born in?</option>
+                            <option value="school">What was your first school?</option>
+                            <option value="food">What is your favorite food?</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="securityAnswer">Answer <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-pen"></i>
+                        <input 
+                            type="text" 
+                            id="securityAnswer" 
+                            placeholder="Your answer" 
+                            required 
+                        />
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn-secondary" id="step2Back">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button type="submit" class="btn-primary" id="step2Btn">
+                        <span class="btn-text">Continue</span>
+                        <i class="fas fa-arrow-right btn-icon"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ===== STEP 3: Confirm & Submit ===== -->
+        <div class="register-step" data-step="3" id="step3">
+            <div style="background: var(--off-white); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+                <h4 style="font-size: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-check-circle" style="color: var(--sky-blue);"></i>
+                    Review Your Information
+                </h4>
+                <div id="reviewData" style="font-size: 14px; color: var(--text-muted);">
+                    <p><strong>Name:</strong> <span id="reviewName">-</span></p>
+                    <p><strong>Email:</strong> <span id="reviewEmail">-</span></p>
+                    <p><strong>Phone:</strong> <span id="reviewPhone">-</span></p>
+                    <p><strong>Role:</strong> <span id="reviewRole">-</span></p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 500;">
+                    <input type="checkbox" id="termsCheck" required style="width: 20px; height: 20px; min-width: 20px; accent-color: var(--sky-blue);" />
+                    I agree to the <a href="#" style="color: var(--sky-blue-dark);">Terms of Service</a> and 
+                    <a href="#" style="color: var(--sky-blue-dark);">Privacy Policy</a>
+                    <span class="required">*</span>
+                </label>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn-secondary" id="step3Back">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button type="submit" class="btn-primary" id="step3Btn" disabled>
+                    <span class="btn-text">Create Account</span>
+                    <i class="fas fa-user-plus btn-icon"></i>
+                </button>
+            </div>
+
+            <div class="divider">or continue with</div>
+
+            <div class="social-login">
+                <button type="button" class="google">
+                    <i class="fab fa-google"></i> Google
+                </button>
+                <button type="button" class="facebook">
+                    <i class="fab fa-facebook-f"></i> Facebook
+                </button>
+            </div>
+
+            <div class="login-link">
+                Already have an account? <a href="login.html">Sign in here</a>
+            </div>
+        </div>
+
+        <!-- ===== SUCCESS MESSAGE ===== -->
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle"></i>
+            <h3>Account Created! 🎉</h3>
+            <p>Welcome to CarePath. You can now login to your account.</p>
+            <a href="login.html" class="btn-primary">
+                <span>Go to Login</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- ===== SCRIPTS ===== -->
+<!-- ============================================================ -->
+<script>
+    // ============================================================
+    // ===== API CONFIGURATION =====
+    // ============================================================
+    const API_CONFIG = {
+        baseURL: 'http://localhost:5001/api',
+        endpoints: {
+            register: '/auth/register',
+            login: '/auth/login'
+        }
+    };
+
+    // ============================================================
+    // ===== TOAST NOTIFICATIONS =====
+    // ============================================================
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icons = {
+            success: '✅',
+            error: '❌',
+            warning: '⚠️'
+        };
+        
+        toast.innerHTML = `
+            <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
+            <span>${message}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+        `;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.classList.add('removing');
+            setTimeout(() => toast.remove(), 400);
+        }, 5000);
+    }
+
+    // ============================================================
+    // ===== DOM Elements =====
+    // ============================================================
+    const steps = document.querySelectorAll('.register-step');
+    const progressDots = document.querySelectorAll('.progress-steps .step');
+    const errorMsg = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+    const successMsg = document.getElementById('successMessage');
+    const registerContainer = document.getElementById('registerContainer');
+
+    const step1Form = document.getElementById('step1Form');
+    const step2Form = document.getElementById('step2Form');
+    const step2Back = document.getElementById('step2Back');
+    const step3Form = document.getElementById('step3Form');
+    const step3Btn = document.getElementById('step3Btn');
+    const step3Back = document.getElementById('step3Back');
+    const termsCheck = document.getElementById('termsCheck');
+
+    const reviewName = document.getElementById('reviewName');
+    const reviewEmail = document.getElementById('reviewEmail');
+    const reviewPhone = document.getElementById('reviewPhone');
+    const reviewRole = document.getElementById('reviewRole');
+
+    const formData = {};
+
+    // ============================================================
+    // ===== Show Error =====
+    // ============================================================
+    function showError(message) {
+        errorText.textContent = message;
+        errorMsg.classList.add('show');
+        clearTimeout(window.errorTimeout);
+        window.errorTimeout = setTimeout(() => {
+            errorMsg.classList.remove('show');
+        }, 5000);
+    }
+
+    // ============================================================
+    // ===== Go to Step =====
+    // ============================================================
+    function goToStep(step) {
+        steps.forEach(s => s.classList.remove('active'));
+        document.querySelector(`.register-step[data-step="${step}"]`).classList.add('active');
+
+        progressDots.forEach(dot => {
+            const dotStep = parseInt(dot.dataset.step);
+            dot.classList.remove('active', 'completed');
+            if (dotStep === step) {
+                dot.classList.add('active');
+            } else if (dotStep < step) {
+                dot.classList.add('completed');
+            }
+        });
+
+        if (window.innerWidth <= 768) {
+            registerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    // ============================================================
+    // ===== Validate Email =====
+    // ============================================================
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // ============================================================
+    // ===== Password Strength =====
+    // ============================================================
+    function checkPasswordStrength(password) {
+        const bars = document.querySelectorAll('.password-strength .bar');
+        const text = document.getElementById('passwordText');
+        let strength = 0;
+
+        if (password.length >= 8) strength++;
+        if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+        if (/\d/.test(password)) strength++;
+        if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+        bars.forEach((bar, index) => {
+            bar.className = 'bar';
+            if (index < strength) {
+                if (strength <= 2) bar.classList.add('weak');
+                else if (strength === 3) bar.classList.add('medium');
+                else bar.classList.add('strong');
+            }
+        });
+
+        if (password.length === 0) {
+            text.textContent = 'Password must be at least 8 characters';
+            text.className = 'password-text';
+        } else if (strength <= 2) {
+            text.textContent = 'Weak password - add uppercase, numbers, or special characters';
+            text.className = 'password-text weak';
+        } else if (strength === 3) {
+            text.textContent = 'Medium password - add special characters for stronger security';
+            text.className = 'password-text medium';
+        } else {
+            text.textContent = 'Strong password! 💪';
+            text.className = 'password-text strong';
+        }
+
+        return strength;
+    }
+
+    // ============================================================
+    // ===== Toggle Password =====
+    // ============================================================
+    document.querySelectorAll('.toggle-password').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const input = this.closest('.input-wrapper').querySelector('input');
+            const icon = this.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+                this.setAttribute('aria-label', 'Hide password');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+                this.setAttribute('aria-label', 'Show password');
+            }
+            input.focus();
+        });
+    });
+
+    // ============================================================
+    // ===== STEP 1: Submit =====
+    // ============================================================
+    step1Form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const role = document.getElementById('role').value;
+
+        if (!name || !email || !role) {
+            showError('Please fill in all required fields.');
+            return;
+        }
+
+        if (name.length < 2) {
+            showError('Please enter your full name.');
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            showError('Please enter a valid email address.');
+            return;
+        }
+
+        formData.name = name;
+        formData.email = email;
+        formData.phone = phone || 'Not provided';
+        formData.role = role;
+
+        reviewName.textContent = name;
+        reviewEmail.textContent = email;
+        reviewPhone.textContent = phone || 'Not provided';
+        reviewRole.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+
+        goToStep(2);
+    });
+
+    // ============================================================
+    // ===== STEP 2: Submit =====
+    // ============================================================
+    step2Form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const password = document.getElementById('password').value;
+        const confirm = document.getElementById('confirmPassword').value;
+        const question = document.getElementById('securityQuestion').value;
+        const answer = document.getElementById('securityAnswer').value.trim();
+
+        if (!password || !confirm || !question || !answer) {
+            showError('Please fill in all required fields.');
+            return;
+        }
+
+        if (password.length < 8) {
+            showError('Password must be at least 8 characters.');
+            return;
+        }
+
+        const strength = checkPasswordStrength(password);
+        if (strength < 2) {
+            showError('Please choose a stronger password.');
+            return;
+        }
+
+        if (password !== confirm) {
+            showError('Passwords do not match.');
+            return;
+        }
+
+        formData.password = password;
+        formData.securityQuestion = question;
+        formData.securityAnswer = answer;
+
+        goToStep(3);
+        step3Btn.disabled = !termsCheck.checked;
+    });
+
+    // ============================================================
+    // ===== STEP 2: Back =====
+    // ============================================================
+    step2Back.addEventListener('click', function() {
+        goToStep(1);
+    });
+
+    // ============================================================
+    // ===== STEP 3: Back =====
+    // ============================================================
+    step3Back.addEventListener('click', function() {
+        goToStep(2);
+    });
+
+    // ============================================================
+    // ===== STEP 3: Terms Check =====
+    // ============================================================
+    termsCheck.addEventListener('change', function() {
+        step3Btn.disabled = !this.checked;
+    });
+
+    // ============================================================
+    // ===== STEP 3: Submit - REGISTER USER =====
+    // ============================================================
+    step3Form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        if (!termsCheck.checked) {
+            showError('Please agree to the Terms of Service.');
+            return;
+        }
+        
+        // Show loading
+        step3Btn.classList.add('loading');
+        step3Btn.querySelector('.btn-text').textContent = 'Creating...';
+
+        try {
+            // Prepare user data for API
+            const userData = {
+                name: formData.name,
+                email: formData.email,
+                password: formData.password,
+                phone: formData.phone === 'Not provided' ? '' : formData.phone,
+                role: formData.role
+            };
+
+            console.log('📤 Sending registration data:', userData);
+
+            // Call the registration API
+            const response = await fetch(`${API_CONFIG.baseURL}${API_CONFIG.endpoints.register}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+
+            const data = await response.json();
+            console.log('📥 Server response:', data);
+
+            if (data.success) {
+                // Registration successful
+                showToast('✅ Account created successfully!', 'success');
+                
+                // Store user data
+                localStorage.setItem('CarePath_user', JSON.stringify(data.user));
+
+                // Show success message
+                document.querySelectorAll('.register-step').forEach(s => s.classList.remove('active'));
+                progressDots.forEach(d => {
+                    d.classList.remove('active', 'completed');
+                    d.classList.add('completed');
+                });
+                successMsg.classList.add('show');
+
+                console.log('✅ User saved to database:', data.user);
+
+                // Redirect after delay
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 3000);
+            } else {
+                // Registration failed
+                showError(data.message || 'Registration failed. Please try again.');
+                step3Btn.classList.remove('loading');
+                step3Btn.querySelector('.btn-text').textContent = 'Create Account';
+            }
+        } catch (error) {
+            console.error('❌ Registration error:', error);
+            
+            if (error.message.includes('Failed to fetch')) {
+                showError('Cannot connect to server. Please make sure backend is running.');
+            } else {
+                showError('Registration failed: ' + error.message);
+            }
+            
+            step3Btn.classList.remove('loading');
+            step3Btn.querySelector('.btn-text').textContent = 'Create Account';
+        }
+    });
+
+    // ============================================================
+    // ===== Password Strength Live Check =====
+    // ============================================================
+    document.getElementById('password').addEventListener('input', function() {
+        checkPasswordStrength(this.value);
+        const confirm = document.getElementById('confirmPassword');
+        if (confirm.value && this.value !== confirm.value) {
+            document.getElementById('confirmHelper').textContent = 'Passwords do not match';
+            document.getElementById('confirmHelper').className = 'helper-text error';
+        } else if (confirm.value && this.value === confirm.value) {
+            document.getElementById('confirmHelper').textContent = 'Passwords match ✓';
+            document.getElementById('confirmHelper').className = 'helper-text success';
+        }
+    });
+
+    // ============================================================
+    // ===== Confirm Password Live Check =====
+    // ============================================================
+    document.getElementById('confirmPassword').addEventListener('input', function() {
+        const password = document.getElementById('password').value;
+        const helper = document.getElementById('confirmHelper');
+        if (this.value && this.value !== password) {
+            helper.textContent = 'Passwords do not match';
+            helper.className = 'helper-text error';
+        } else if (this.value && this.value === password) {
+            helper.textContent = 'Passwords match ✓';
+            helper.className = 'helper-text success';
+        } else {
+            helper.textContent = 'Passwords must match';
+            helper.className = 'helper-text';
+        }
+    });
+
+    // ============================================================
+    // ===== Social Login (Coming Soon) =====
+    // ============================================================
+    document.querySelectorAll('.social-login button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const provider = this.classList.contains('google') ? 'Google' : 'Facebook';
+            showToast(`🔜 Sign up with ${provider} is coming soon!`, 'warning');
+        });
+    });
+
+    // ============================================================
+    // ===== Utility Functions =====
+    // ============================================================
+    document.querySelectorAll('input, select').forEach(el => {
+        el.addEventListener('input', () => errorMsg.classList.remove('show'));
+        el.addEventListener('change', () => errorMsg.classList.remove('show'));
+        el.addEventListener('focus', () => errorMsg.classList.remove('show'));
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') errorMsg.classList.remove('show');
+    });
+
+    document.querySelectorAll('.register-step input').forEach(input => {
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const step = this.closest('.register-step');
+                const submitBtn = step.querySelector('.btn-primary');
+                if (submitBtn) submitBtn.click();
+            }
+        });
+    });
+
+    // ============================================================
+    // ===== Phone number formatting =====
+    // ============================================================
+    document.getElementById('phone').addEventListener('input', function() {
+        let value = this.value.replace(/\D/g, '');
+        if (value.length > 10) value = value.slice(0, 10);
+        if (value.length > 6) {
+            value = value.replace(/(\d{3})(\d{3})(\d{0,4})/, '($1) $2-$3');
+        } else if (value.length > 3) {
+            value = value.replace(/(\d{3})(\d{0,3})/, '($1) $2');
+        }
+        this.value = value;
+    });
+
+    // ============================================================
+    // ===== Prevent zoom on double tap (iOS) =====
+    // ============================================================
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) e.preventDefault();
+        lastTouchEnd = now;
+    }, false);
+
+    // ============================================================
+    // ===== Handle viewport height for mobile =====
+    // ============================================================
+    function setVH() {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', vh + 'px');
+    }
+    setVH();
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', () => setTimeout(setVH, 200));
+
+    // ============================================================
+    // ===== Scroll to top on mobile when input is focused =====
+    // ============================================================
+    document.querySelectorAll('input, select').forEach(el => {
+        el.addEventListener('focus', function() {
+            if (window.innerWidth <= 768) {
+                setTimeout(() => {
+                    this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }
+        });
+    });
+
+    // ============================================================
+    // ===== INIT =====
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('📝 CarePath - Register page loaded successfully!');
+        console.log('📍 API URL:', API_CONFIG.baseURL + API_CONFIG.endpoints.register);
+    });
+</script>
+
+</body>
+</html>

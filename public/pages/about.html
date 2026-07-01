@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Alzheimer's - CarePath</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    
+    <style>
+        /* ============================================================
+        CSS VARIABLES
+        ============================================================ */
+        :root {
+            --primary: #87CEEB;
+            --primary-dark: #5BA3C9;
+            --primary-light: #D4EEF7;
+            --secondary: #90EE90;
+            --secondary-dark: #6BCB6B;
+            --secondary-light: #D4F5D4;
+            --white: #FFFFFF;
+            --off-white: #F8F9FA;
+            --off-white-light: #F0F2F5;
+            --off-white-dark: #E5E7EB;
+            --text-dark: #1a2a3a;
+            --text-gray: #4a5a6a;
+            --text-light: #6b7a8a;
+            --shadow: 0 10px 40px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 60px rgba(0,0,0,0.12);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --radius-xs: 8px;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --danger: #dc2626;
+            --success: #16a34a;
+            --warning: #d97706;
+            --skyblue-gradient: linear-gradient(135deg, #87CEEB 0%, #5BA3C9 100%);
+            --border-color: #E5E7EB;
+        }
+
+        /* ============================================================
+        RESET & BASE
+        ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--off-white);
+            color: var(--text-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ============================================================
+        SCROLLBAR
+        ============================================================ */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--off-white);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ============================================================
+        ANIMATIONS
+        ============================================================ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .fade-in:nth-child(2) { animation-delay: 0.15s; }
+        .fade-in:nth-child(3) { animation-delay: 0.3s; }
+        .fade-in:nth-child(4) { animation-delay: 0.45s; }
+        .fade-in:nth-child(5) { animation-delay: 0.6s; }
+        .fade-in:nth-child(6) { animation-delay: 0.75s; }
+
+        /* ============================================================
+        UTILITY CLASSES
+        ============================================================ */
+        .mt-1 { margin-top: 8px; }
+        .mt-2 { margin-top: 16px; }
+        .mt-3 { margin-top: 24px; }
+        .mt-4 { margin-top: 32px; }
+        .mt-5 { margin-top: 40px; }
+        .mb-1 { margin-bottom: 8px; }
+        .mb-2 { margin-bottom: 16px; }
+        .mb-3 { margin-bottom: 24px; }
+        .mb-4 { margin-bottom: 32px; }
+        .mb-5 { margin-bottom: 40px; }
+
+        .text-center { text-align: center; }
+        .text-muted { color: var(--text-gray); }
+        .required { color: var(--danger); font-weight: 700; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-light);
+            transform: translateY(-4px);
+        }
+
+        .card-hover {
+            transition: var(--transition);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+            margin: 8px auto 16px;
+        }
+
+        .section-subtitle {
+            color: var(--text-gray);
+            font-size: 16px;
+            max-width: 600px;
+            margin: 0 auto 20px;
+        }
+
+        /* ============================================================
+        BUTTONS
+        ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(135, 206, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(135, 206, 235, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--off-white);
+            color: var(--text-dark);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-dark);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            background: var(--off-white);
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 6px 16px;
+            font-size: 13px;
+            min-width: auto;
+        }
+
+        .btn-lg {
+            padding: 14px 32px;
+            font-size: 17px;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* ============================================================
+        /* ============================================================
+NAVBAR - Enhanced Version
+============================================================ */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(135, 206, 235, 0.15);
+    padding: 0;
+    animation: slideDown 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.navbar.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+    border-bottom-color: rgba(135, 206, 235, 0.25);
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ===== Brand / Logo ===== */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.02);
+}
+
+.navbar-brand .logo-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-brand .logo-icon {
+    height: 40px;
+    width: 40px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 2px 10px rgba(135, 206, 235, 0.3);
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover .logo-icon {
+    box-shadow: 0 4px 20px rgba(135, 206, 235, 0.5);
+    transform: rotate(-5deg) scale(1.05);
+}
+
+.navbar-brand .logo-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(135, 206, 235, 0.4);
+}
+
+.navbar-brand .brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.navbar-brand .brand-name {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-dark);
+    letter-spacing: -0.5px;
+}
+
+.navbar-brand .brand-name .highlight {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.navbar-brand .brand-version {
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--text-light);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    -webkit-text-fill-color: var(--text-light);
+    background: none;
+}
+
+/* ===== Navigation Links ===== */
+.nav-links {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    position: relative;
+}
+
+.nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text-gray);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    text-decoration: none;
+    position: relative;
+    white-space: nowrap;
+}
+
+.nav-links a i {
+    font-size: 16px;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover i,
+.nav-links a.active i {
+    opacity: 1;
+}
+
+/* Hover & Active States */
+.nav-links a::before {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2.5px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.nav-links a:hover::before,
+.nav-links a.active::before {
+    width: 60%;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--text-dark);
+    background: rgba(135, 206, 235, 0.08);
+}
+
+.nav-links a:active {
+    transform: scale(0.96);
+}
+
+/* ===== Nav Buttons ===== */
+.nav-links .nav-btn {
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-links .nav-btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    box-shadow: 0 2px 15px rgba(135, 206, 235, 0.3);
+}
+
+.nav-links .nav-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(135, 206, 235, 0.4);
+    background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
+}
+
+.nav-links .nav-btn-primary:active {
+    transform: translateY(0);
+}
+
+.nav-links .nav-btn-secondary {
+    background: transparent;
+    color: var(--text-dark);
+    border: 2px solid var(--border-color);
+}
+
+.nav-links .nav-btn-secondary:hover {
+    border-color: var(--primary);
+    background: rgba(135, 206, 235, 0.08);
+    transform: translateY(-2px);
+}
+
+.nav-links .nav-btn-secondary:active {
+    transform: translateY(0);
+}
+
+.nav-links .nav-btn-outline {
+    background: transparent;
+    color: var(--text-gray);
+    border: 2px solid var(--border-color);
+}
+
+.nav-links .nav-btn-outline:hover {
+    border-color: var(--primary);
+    color: var(--text-dark);
+    background: rgba(135, 206, 235, 0.08);
+    transform: translateY(-2px);
+}
+
+/* ===== Dropdown Menu ===== */
+.nav-links .dropdown {
+    position: relative;
+}
+
+.nav-links .dropdown-toggle {
+    cursor: pointer;
+}
+
+.nav-links .dropdown-toggle .chevron {
+    font-size: 10px;
+    transition: all 0.3s ease;
+    margin-left: 2px;
+}
+
+.nav-links .dropdown-toggle:hover .chevron,
+.nav-links .dropdown-toggle.active .chevron {
+    transform: rotate(180deg);
+}
+
+.nav-links .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 200px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(135, 206, 235, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    list-style: none;
+}
+
+.nav-links .dropdown:hover .dropdown-menu,
+.nav-links .dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.nav-links .dropdown-menu li {
+    margin: 0;
+}
+
+.nav-links .dropdown-menu a {
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    white-space: nowrap;
+    color: var(--text-gray);
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.nav-links .dropdown-menu a::before {
+    display: none;
+}
+
+.nav-links .dropdown-menu a:hover {
+    background: rgba(135, 206, 235, 0.1);
+    color: var(--text-dark);
+}
+
+.nav-links .dropdown-menu .dropdown-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 4px 8px;
+}
+
+/* ===== User Avatar ===== */
+.nav-links .user-avatar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px 4px 4px;
+    border-radius: 50px;
+    background: rgba(135, 206, 235, 0.08);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.nav-links .user-avatar:hover {
+    border-color: var(--primary);
+    background: rgba(135, 206, 235, 0.15);
+}
+
+.nav-links .user-avatar img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.nav-links .user-avatar .user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* ===== Hamburger Menu ===== */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 8px;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.hamburger:hover {
+    background: rgba(135, 206, 235, 0.08);
+}
+
+.hamburger:active {
+    transform: scale(0.92);
+}
+
+.hamburger span {
+    display: block;
+    width: 26px;
+    height: 2.5px;
+    background: var(--text-dark);
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-origin: center;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ============================================================
+RESPONSIVE NAVBAR
+============================================================ */
+@media (max-width: 992px) {
+    .nav-links .dropdown-menu {
+        left: 0;
+        transform: translateX(0) translateY(10px);
+    }
+    
+    .nav-links .dropdown:hover .dropdown-menu,
+    .nav-links .dropdown-menu.show {
+        transform: translateX(0) translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar .container {
+        padding: 10px 16px;
+    }
+
+    .navbar-brand .brand-name {
+        font-size: 18px;
+    }
+    
+    .navbar-brand .logo-icon {
+        height: 34px;
+        width: 34px;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        flex-direction: column;
+        align-items: stretch;
+        padding: 80px 20px 20px;
+        gap: 4px;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow: -10px 0 40px rgba(0, 0, 0, 0.08);
+        border-left: 1px solid rgba(135, 206, 235, 0.15);
+        overflow-y: auto;
+    }
+
+    .nav-links.open {
+        right: 0;
+    }
+
+    .nav-links a {
+        padding: 12px 16px;
+        font-size: 15px;
+        border-radius: 10px;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .nav-links a::before {
+        display: none;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+        background: rgba(135, 206, 235, 0.1);
+    }
+
+    .nav-links .nav-btn {
+        justify-content: center;
+        padding: 12px 20px;
+        width: 100%;
+    }
+
+    /* Mobile Overlay */
+    .nav-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease;
+        z-index: 998;
+    }
+
+    .nav-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Mobile Dropdown */
+    .nav-links .dropdown-menu {
+        position: static;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+        box-shadow: none;
+        border: none;
+        background: transparent;
+        padding: 4px 0 4px 16px;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .nav-links .dropdown-menu.open {
+        max-height: 300px;
+        padding: 4px 0 4px 16px;
+    }
+
+    .nav-links .dropdown-menu a {
+        font-size: 14px;
+        padding: 8px 14px;
+    }
+
+    .nav-links .dropdown-menu .dropdown-divider {
+        margin: 4px 0;
+    }
+
+    .nav-links .dropdown-toggle .chevron {
+        margin-left: auto;
+    }
+
+    .nav-links .user-avatar {
+        padding: 8px 16px;
+        border-radius: 10px;
+        width: 100%;
+        justify-content: flex-start;
+        background: transparent;
+        border: none;
+    }
+
+    .nav-links .user-avatar:hover {
+        background: rgba(135, 206, 235, 0.08);
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar .container {
+        padding: 8px 12px;
+    }
+
+    .navbar-brand .brand-name {
+        font-size: 16px;
+    }
+    
+    .navbar-brand .logo-icon {
+        height: 30px;
+        width: 30px;
+        border-radius: 10px;
+    }
+    
+    .navbar-brand .brand-version {
+        font-size: 8px;
+    }
+
+    .nav-links {
+        width: 100%;
+        right: -100%;
+        padding: 70px 16px 16px;
+    }
+
+    .nav-links a {
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+}
+        /* ============================================================
+        PAGE HEADER
+        ============================================================ */
+        .page-header {
+            background: var(--skyblue-gradient);
+            padding: 60px 0;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .page-header .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header h1 {
+            font-size: 42px;
+            font-weight: 800;
+        }
+
+        .page-header .divider {
+            width: 60px;
+            height: 4px;
+            background: var(--white);
+            border-radius: 4px;
+            margin: 16px auto;
+        }
+
+        .page-header p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        /* ============================================================
+        QUICK FACTS CARD
+        ============================================================ */
+        .facts-card {
+            background: var(--off-white-light);
+            border-radius: var(--radius);
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            height: 100%;
+        }
+
+        .facts-card h3 {
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .facts-card ul li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .facts-card ul li:last-child {
+            border-bottom: none;
+        }
+
+        .facts-card ul li strong {
+            color: var(--text-dark);
+        }
+
+        /* ============================================================
+        SYMPTOM CARDS
+        ============================================================ */
+        .symptom-card {
+            text-align: center;
+            padding: 24px 20px;
+        }
+
+        .symptom-card .icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .symptom-card h4 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .symptom-card p {
+            color: var(--text-gray);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* ============================================================
+        PREVENTION TIPS
+        ============================================================ */
+        .prevention-card h4 {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .prevention-card ul {
+            padding-left: 0;
+        }
+
+        .prevention-card ul li {
+            padding: 6px 0;
+            color: var(--text-gray);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prevention-card ul li::before {
+            content: '✓';
+            color: var(--primary-dark);
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        /* ============================================================
+        CTA SECTION
+        ============================================================ */
+        .cta-section {
+            background: var(--skyblue-gradient);
+            border-radius: var(--radius);
+            padding: 40px;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 24px;
+        }
+
+        .cta-section .btn-white {
+            background: var(--white);
+            color: var(--primary);
+            border: none;
+        }
+
+        .cta-section .btn-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .cta-section .btn-outline-white {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .cta-section .btn-outline-white:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        /* ============================================================
+        FOOTER
+        ============================================================ */
+        .footer {
+            background: var(--text-dark);
+            color: rgba(255,255,255,0.7);
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+
+        .footer .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer h4 {
+            color: var(--white);
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .footer p {
+            font-size: 14px;
+            max-width: 300px;
+        }
+
+        .footer ul li {
+            margin-bottom: 6px;
+        }
+
+        .footer ul li a {
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .footer ul li a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            grid-column: 1 / -1;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 16px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* ============================================================
+        RESPONSIVE DESIGN
+        ============================================================ */
+        @media (max-width: 992px) {
+            .grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer .container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                padding: 20px;
+                gap: 12px;
+                box-shadow: var(--shadow);
+                border-radius: 0 0 var(--radius) var(--radius);
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 30px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .cta-section {
+                padding: 30px 20px;
+            }
+
+            .cta-section h2 {
+                font-size: 24px;
+            }
+
+            .footer .container {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .page-header h1 {
+                font-size: 26px;
+            }
+
+            .page-header p {
+                font-size: 16px;
+            }
+
+            .navbar-brand {
+                font-size: 20px;
+            }
+
+            .navbar-brand img {
+                height: 28px;
+                width: 28px;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 8px 18px;
+                min-width: 100px;
+            }
+
+            .symptom-card {
+                padding: 16px;
+            }
+
+            .symptom-card .icon {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    NAVBAR
+    ============================================================ -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">
+                <div class="brand-text">
+                    <span class="brand-name">Safe<span class="highlight">Track</span></span>
+                </div>
+            </a>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="login.html" class="btn btn-sm btn-primary">Login</a></li>
+                <li><a href="register.html" class="btn btn-sm btn-secondary">Register</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ============================================================
+    PAGE HEADER
+    ============================================================ -->
+    <section class="page-header">
+        <div class="container text-center">
+            <div class="fade-in">
+                <h1>Understanding Alzheimer's</h1>
+                <div class="divider"></div>
+                <p>
+                    Learn about Alzheimer's disease, its symptoms, and how we can help
+                    protect those affected by it.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    CONTENT
+    ============================================================ -->
+    <section class="container mt-5 mb-5">
+        <!-- What is Alzheimer's -->
+        <div class="grid-2 mt-4">
+            <div class="fade-in">
+                <h2 class="section-title" style="font-size: 28px;">What is <span class="highlight">Alzheimer's Disease</span>?</h2>
+                <div class="section-divider" style="margin-left: 0;"></div>
+                <p style="font-size: 16px; line-height: 1.8; color: var(--text-dark);">
+                    Alzheimer's disease is a progressive neurological disorder that causes
+                    brain cells to degenerate and die. It is the most common cause of
+                    dementia — a continuous decline in thinking, behavioral, and social
+                    skills that affects a person's ability to function independently.
+                </p>
+                <p style="font-size: 16px; line-height: 1.8; color: var(--text-dark); margin-top: 12px;">
+                    The disease is named after Dr. Alois Alzheimer, who first described it
+                    in 1906. Today, millions of people worldwide are living with Alzheimer's,
+                    and the number continues to grow as the population ages.
+                </p>
+            </div>
+            <div class="fade-in" style="animation-delay: 0.2s;">
+                <div class="facts-card">
+                    <h3>📊 Quick Facts</h3>
+                    <ul>
+                        <li><strong>60-80%</strong> of dementia cases are Alzheimer's</li>
+                        <li><strong>6.7 million</strong> Americans are living with Alzheimer's</li>
+                        <li><strong>1 in 3</strong> seniors dies with Alzheimer's or another dementia</li>
+                        <li><strong>60%</strong> of people with Alzheimer's will wander</li>
+                        <li><strong>73%</strong> of people with Alzheimer's are age 75 or older</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Symptoms -->
+        <div class="mt-5">
+            <h2 class="section-title text-center">Common <span class="highlight">Symptoms</span></h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle text-center">
+                Recognizing the early signs of Alzheimer's can lead to earlier diagnosis and better care.
+            </p>
+
+            <div class="grid-3 mt-4">
+                <div class="card symptom-card fade-in">
+                    <div class="icon">🧠</div>
+                    <h4>Memory Loss</h4>
+                    <p>
+                        Forgetting recently learned information, important dates, or events.
+                        Asking for the same information repeatedly.
+                    </p>
+                </div>
+                <div class="card symptom-card fade-in" style="animation-delay: 0.15s;">
+                    <div class="icon">🗣️</div>
+                    <h4>Communication Issues</h4>
+                    <p>
+                        Difficulty following or joining a conversation, struggling with
+                        vocabulary, or repeating themselves.
+                    </p>
+                </div>
+                <div class="card symptom-card fade-in" style="animation-delay: 0.3s;">
+                    <div class="icon">🚶</div>
+                    <h4>Wandering Behavior</h4>
+                    <p>
+                        Becoming disoriented or lost, even in familiar places. This is
+                        one of the most dangerous symptoms of Alzheimer's.
+                    </p>
+                </div>
+                <div class="card symptom-card fade-in" style="animation-delay: 0.45s;">
+                    <div class="icon">😤</div>
+                    <h4>Mood & Personality Changes</h4>
+                    <p>
+                        Becoming confused, suspicious, depressed, fearful, or anxious.
+                        Easily upset or agitated in unfamiliar situations.
+                    </p>
+                </div>
+                <div class="card symptom-card fade-in" style="animation-delay: 0.6s;">
+                    <div class="icon">👀</div>
+                    <h4>Visual Changes</h4>
+                    <p>
+                        Difficulty reading, judging distance, or determining color or contrast.
+                        May have problems with balance or coordination.
+                    </p>
+                </div>
+                <div class="card symptom-card fade-in" style="animation-delay: 0.75s;">
+                    <div class="icon">🛏️</div>
+                    <h4>Sleep Changes</h4>
+                    <p>
+                        Disrupted sleep patterns, waking up frequently at night, or
+                        experiencing sundowning (increased confusion in the evening).
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prevention Tips -->
+        <div class="mt-5">
+            <h2 class="section-title text-center">Wandering <span class="highlight">Prevention Tips</span></h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle text-center">
+                Help keep your loved ones safe with these wandering prevention strategies.
+            </p>
+
+            <div class="grid-2 mt-4">
+                <div class="card prevention-card fade-in">
+                    <h4>🔒 Secure the Environment</h4>
+                    <ul>
+                        <li>Install locks on doors and windows</li>
+                        <li>Use door alarms or sensors</li>
+                        <li>Keep keys out of sight</li>
+                        <li>Create a safe outdoor space</li>
+                    </ul>
+                </div>
+                <div class="card prevention-card fade-in" style="animation-delay: 0.2s;">
+                    <h4>📱 Use Technology</h4>
+                    <ul>
+                        <li>GPS tracking devices</li>
+                        <li>Medical alert systems</li>
+                        <li>Video monitoring</li>
+                        <li>ID bracelets with contact info</li>
+                    </ul>
+                </div>
+                <div class="card prevention-card fade-in" style="animation-delay: 0.4s;">
+                    <h4>👥 Stay Engaged</h4>
+                    <ul>
+                        <li>Regular exercise and activities</li>
+                        <li>Social interaction</li>
+                        <li>Structured daily routine</li>
+                        <li>Cognitive stimulation</li>
+                    </ul>
+                </div>
+                <div class="card prevention-card fade-in" style="animation-delay: 0.6s;">
+                    <h4>📋 Plan Ahead</h4>
+                    <ul>
+                        <li>Create a care team</li>
+                        <li>Know the local resources</li>
+                        <li>Have a response plan</li>
+                        <li>Notify neighbors and community</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="mt-5 text-center">
+            <div class="cta-section">
+                <h2>Together, We Can Make a Difference</h2>
+                <p>
+                    Join Carepath today and help reunite families with their loved ones.
+                </p>
+                <div class="flex-center" style="gap: 16px; flex-wrap: wrap;">
+                    <a href="register.html" class="btn btn-white">Join Now</a>
+                    <a href="community/active-cases.html" class="btn btn-outline-white">View Cases</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    FOOTER
+    ============================================================ -->
+    <footer class="footer">
+        <div class="container">
+            <div>
+                <h4>CarePath</h4>
+                <p>
+                    A community-driven platform dedicated to raising awareness
+                    and helping locate missing elderly individuals with Alzheimer's.
+                </p>
+            </div>
+            <div>
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="community/active-cases.html">Cases</a></li>
+                    <li><a href="community/safety-guide.html">Safety Guide</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="mailto:help@carepath.com"><i class="fas fa-envelope"></i> help@carepath.com</a></li>
+                    <li><a href="tel:+11234567890"><i class="fas fa-phone"></i> +1 (123) 456-7890</a></li>
+                    <li><a href="#"><i class="fab fa-twitter"></i> @CarePath</a></li>
+                    <li><a href="#"><i class="fab fa-facebook"></i> @CarePath</a></li>
+                </ul>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2025 CarePath. All rights reserved. Made with <i class="fas fa-heart" style="color: var(--danger);"></i> for community safety.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ============================================================
+        // NAVIGATION TOGGLE
+        // ============================================================
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        if (hamburger && navLinks) {
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('open');
+            });
+
+            // Close menu on link click (mobile)
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('open');
+                });
+            });
+        }
+
+        // ============================================================
+        // SCROLL ANIMATIONS - OBSERVER FOR REPEATED ANIMATIONS
+        // ============================================================
+        const animateElements = document.querySelectorAll('.fade-in');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Reset animation by removing and re-adding the class
+                    entry.target.style.animation = 'none';
+                    entry.target.offsetHeight; // Trigger reflow
+                    entry.target.style.animation = null;
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        animateElements.forEach(el => observer.observe(el));
+
+        // ============================================================
+        // KEYBOARD SHORTCUTS
+        // ============================================================
+        document.addEventListener('keydown', (e) => {
+            // Escape key to close mobile menu
+            if (e.key === 'Escape' && navLinks && navLinks.classList.contains('open')) {
+                navLinks.classList.remove('open');
+            }
+        });
+
+        // ============================================================
+        // SMOOTH SCROLL FOR INTERNAL LINKS
+        // ============================================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ============================================================
+        // CONSOLE WELCOME
+        // ============================================================
+        console.log('%c🧠 CarePath - About Alzheimer\'s', 'font-size: 24px; font-weight: bold; color: #87CEEB;');
+        console.log('%cTogether, we can make a difference in the lives of those affected by Alzheimer\'s.', 'font-size: 14px; color: #4a5a6a;');
+        console.log('%c💡 Did you know? 60% of people with Alzheimer\'s will wander at some point.', 'font-size: 14px; color: #d97706;');
+        console.log('✅ Page loaded successfully!');
+    </script>
+
+</body>
+</html>

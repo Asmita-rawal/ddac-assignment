@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Admin Dashboard - CarePath</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    
+    <style>
+        /* ============================================================
+           CSS VARIABLES & RESET
+           ============================================================ */
+        :root {
+            --primary: #87CEEB;
+            --primary-dark: #5BA3C9;
+            --primary-light: #D4EEF7;
+            --secondary: #90EE90;
+            --secondary-dark: #6BCB6B;
+            --secondary-light: #D4F5D4;
+            --white: #FFFFFF;
+            --off-white: #F8F9FA;
+            --off-white-dark: #E9ECEF;
+            --text-dark: #1a2a3a;
+            --text-gray: #6B7A8A;
+            --text-muted: #4a5a6a;
+            --shadow: 0 10px 40px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 60px rgba(0,0,0,0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --nav-bg: rgba(255,255,255,0.92);
+            --card-bg: rgba(255,255,255,0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--off-white);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: linear-gradient(135deg, var(--off-white) 0%, var(--primary-light) 50%, var(--secondary-light) 100%);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* ===== Background Decor ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -40%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(135,206,235,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatBg 10s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -30%;
+            left: -15%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(144,238,144,0.10) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatBgReverse 12s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-25px) scale(1.05); }
+        }
+        @keyframes floatBgReverse {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(25px) scale(1.05); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ============================================================
+           UTILITY CLASSES
+           ============================================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+        .flex {
+            display: flex;
+            align-items: center;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+        .gap-1 { gap: 8px; }
+        .gap-2 { gap: 12px; }
+        .gap-3 { gap: 16px; }
+        .mt-2 { margin-top: 12px; }
+        .mt-3 { margin-top: 20px; }
+        .mt-4 { margin-top: 32px; }
+        .mb-3 { margin-bottom: 20px; }
+        .mb-4 { margin-bottom: 32px; }
+        .mb-5 { margin-bottom: 40px; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 800;
+        }
+        .section-divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            margin: 6px 0 8px;
+        }
+        .section-subtitle {
+            color: var(--text-gray);
+            font-size: 15px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 22px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            min-height: 42px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 16px rgba(135,206,235,0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(135,206,235,0.4);
+        }
+        .btn-secondary {
+            background: var(--white);
+            color: var(--text-dark);
+            border: 2px solid var(--off-white-dark);
+        }
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--text-dark);
+            border: 2px solid var(--off-white-dark);
+        }
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 13px;
+            min-height: 34px;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        /* ============================================================
+           NAVBAR
+           ============================================================ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+        .navbar-brand i {
+            color: var(--primary);
+            font-size: 28px;
+        }
+        .navbar-brand span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            font-size: 14px;
+            margin-left: 2px;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            font-size: 14px;
+            transition: var(--transition);
+            padding: 6px 0;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: var(--transition);
+        }
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        .nav-links a.active {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+        .nav-links a:hover {
+            color: var(--text-dark);
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+        .hamburger span {
+            width: 26px;
+            height: 3px;
+            background: var(--text-dark);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* ============================================================
+           STAT CARDS
+           ============================================================ */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .card-stat {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--radius-sm);
+            padding: 20px 24px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            transition: var(--transition);
+        }
+        .card-stat:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+        .card-stat .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.2;
+            animation: countUp 0.6s ease;
+        }
+        .card-stat .stat-label {
+            font-size: 14px;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+        .card-stat.green { border-left-color: var(--secondary-dark); }
+        .card-stat.gold { border-left-color: #F39C12; }
+        .card-stat.red { border-left-color: #E74C3C; }
+        .card-stat.purple { border-left-color: #8B5CF6; }
+
+        /* ============================================================
+           CARDS
+           ============================================================ */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            padding: 20px 22px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+        .card-hover {
+            cursor: pointer;
+        }
+        .card-hover:hover {
+            border-color: var(--primary);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .card-body {
+            padding: 0;
+        }
+
+        /* ============================================================
+           TOAST NOTIFICATION
+           ============================================================ */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            padding: 14px 20px;
+            box-shadow: var(--shadow-hover);
+            border-left: 4px solid var(--primary);
+            animation: slideIn 0.3s ease;
+            min-width: 280px;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toast.success { border-left-color: var(--secondary-dark); }
+        .toast.error { border-left-color: #E74C3C; }
+        .toast.info { border-left-color: var(--primary); }
+        .toast .toast-icon {
+            font-size: 20px;
+        }
+        .toast.success .toast-icon { color: var(--secondary-dark); }
+        .toast.error .toast-icon { color: #E74C3C; }
+        .toast.info .toast-icon { color: var(--primary); }
+        .toast .toast-content {
+            flex: 1;
+        }
+        .toast .toast-title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .toast .toast-message {
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+        .toast .toast-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text-gray);
+            padding: 0 4px;
+        }
+        .toast .toast-close:hover {
+            color: var(--text-dark);
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .footer {
+            margin-top: auto;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255,255,255,0.3);
+            padding: 36px 0 20px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        .footer .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 32px;
+        }
+        .footer h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+        .footer p {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+        .footer ul {
+            list-style: none;
+        }
+        .footer ul li {
+            margin-bottom: 4px;
+        }
+        .footer ul a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        .footer ul a:hover {
+            color: var(--text-dark);
+        }
+        .footer-bottom {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--off-white-dark);
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 992px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .footer .container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(255,255,255,0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 24px 20px;
+                gap: 12px;
+                transform: translateY(-120%);
+                transition: var(--transition);
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+                align-items: stretch;
+                text-align: center;
+            }
+            .nav-links.open {
+                transform: translateY(0);
+            }
+            .nav-links .btn {
+                justify-content: center;
+            }
+
+            .container {
+                padding: 0 16px;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .grid-4 {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .section-title {
+                font-size: 22px;
+            }
+            .card-stat .stat-number {
+                font-size: 22px;
+            }
+            .card-stat {
+                padding: 16px 18px;
+            }
+            .footer .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                text-align: center;
+            }
+            .flex-between {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            .toast-container {
+                right: 12px;
+                left: 12px;
+            }
+            .toast {
+                min-width: unset;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .grid-4 {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .card-stat {
+                padding: 14px 14px;
+            }
+            .card-stat .stat-number {
+                font-size: 20px;
+            }
+            .card-stat .stat-label {
+                font-size: 12px;
+            }
+            .card {
+                padding: 16px;
+            }
+            .btn {
+                font-size: 13px;
+                padding: 8px 16px;
+                min-height: 38px;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-height: 600px) and (orientation: landscape) {
+            .navbar {
+                padding: 6px 0;
+            }
+            .navbar-brand i {
+                font-size: 22px;
+            }
+            .navbar-brand {
+                font-size: 18px;
+            }
+            .page-wrapper {
+                padding-top: 60px;
+            }
+            .dashboard-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+            .card-stat {
+                padding: 12px 14px;
+            }
+            .card-stat .stat-number {
+                font-size: 18px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        @media print {
+            .navbar, .footer { display: none; }
+            .page-wrapper { padding-top: 40px; }
+            .card { border: 1px solid #ddd; }
+            .card-stat { border: 1px solid #ddd; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================
+NAVBAR
+============================================================ -->
+<nav class="navbar" id="navbar">
+    <div class="container">
+        <a href="dashboard.html" class="navbar-brand">
+            <i class="fas fa-shield-alt"></i>
+            CarePath
+            <span>Admin</span>
+        </a>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="dashboard.html" class="active">Dashboard</a></li>
+            <li><a href="manage-users.html">Users</a></li>
+            <li><a href="manage-cases.html">Cases</a></li>
+            <li><a href="manage-reports.html">Reports</a></li>
+            <li><a href="manage-sightings.html">Sightings</a></li>
+            <li><a href="analytics.html">Analytics</a></li>
+            <li><a href="../index.html" class="btn btn-danger btn-sm">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ============================================================
+TOAST CONTAINER
+============================================================ -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ============================================================
+MAIN CONTENT
+============================================================ -->
+<main style="padding-top: 85px; flex: 1; position: relative; z-index: 1;">
+
+    <section class="container mb-5">
+        <!-- Header -->
+        <div class="flex-between">
+            <div>
+                <h2 class="section-title">Admin <span class="highlight">Dashboard</span></h2>
+                <div class="section-divider" style="margin-left: 0;"></div>
+                <p class="section-subtitle">Welcome back, Admin! Here's your overview.</p>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn btn-secondary" onclick="refreshData()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                <button class="btn btn-outline" onclick="exportData()"><i class="fas fa-download"></i> Export</button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="dashboard-grid mt-3">
+            <div class="card-stat">
+                <div class="stat-number" id="totalUsers">1,280</div>
+                <div class="stat-label">Total Users</div>
+                <div style="font-size: 12px; color: var(--text-gray); margin-top: 4px;">
+                    <span style="color: var(--secondary-dark);">↑ 12%</span> this month
+                </div>
+            </div>
+            <div class="card-stat green">
+                <div class="stat-number" id="activeCases">156</div>
+                <div class="stat-label">Active Cases</div>
+                <div style="font-size: 12px; color: var(--text-gray); margin-top: 4px;">
+                    <span style="color: var(--secondary-dark);">↑ 5%</span> this week
+                </div>
+            </div>
+            <div class="card-stat gold">
+                <div class="stat-number" id="totalSightings">342</div>
+                <div class="stat-label">Total Sightings</div>
+                <div style="font-size: 12px; color: var(--text-gray); margin-top: 4px;">
+                    <span style="color: var(--secondary-dark);">↑ 8%</span> this week
+                </div>
+            </div>
+            <div class="card-stat red">
+                <div class="stat-number" id="pendingSightings">23</div>
+                <div class="stat-label">Pending Sightings</div>
+                <div style="font-size: 12px; color: var(--text-gray); margin-top: 4px;">
+                    <span style="color: #E74C3C;">⚠️ Needs attention</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid-4 mt-3">
+            <a href="manage-users.html" class="card card-hover text-center">
+                <div style="font-size: 32px; margin-bottom: 8px;"><i class="fas fa-users" style="color: var(--primary);"></i></div>
+                <strong>Manage Users</strong>
+                <p style="font-size: 13px; color: var(--text-gray);">View and manage users</p>
+            </a>
+            <a href="manage-cases.html" class="card card-hover text-center">
+                <div style="font-size: 32px; margin-bottom: 8px;"><i class="fas fa-briefcase" style="color: var(--secondary-dark);"></i></div>
+                <strong>Manage Cases</strong>
+                <p style="font-size: 13px; color: var(--text-gray);">Review and update cases</p>
+            </a>
+            <a href="manage-sightings.html" class="card card-hover text-center">
+                <div style="font-size: 32px; margin-bottom: 8px;"><i class="fas fa-eye" style="color: #F39C12;"></i></div>
+                <strong>Verify Sightings</strong>
+                <p style="font-size: 13px; color: var(--text-gray);">Review pending sightings</p>
+            </a>
+            <a href="analytics.html" class="card card-hover text-center">
+                <div style="font-size: 32px; margin-bottom: 8px;"><i class="fas fa-chart-line" style="color: #8B5CF6;"></i></div>
+                <strong>Analytics</strong>
+                <p style="font-size: 13px; color: var(--text-gray);">View detailed statistics</p>
+            </a>
+        </div>
+
+        <!-- Recent Activity & Pending Actions -->
+        <div class="grid-2 mt-4">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title"><i class="fas fa-clock" style="color: var(--primary);"></i> Recent Activity</span>
+                    <span style="font-size: 13px; color: var(--text-gray);">Last 24 hours</span>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                    <div style="padding: 12px 0; border-bottom: 1px solid var(--off-white);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-weight: 600;">New User</span>
+                                <span style="font-size: 13px; color: var(--text-gray); display: block;">John Doe registered</span>
+                            </div>
+                            <span style="font-size: 13px; color: var(--text-gray);">2 min ago</span>
+                        </div>
+                    </div>
+                    <div style="padding: 12px 0; border-bottom: 1px solid var(--off-white);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-weight: 600;">Sighting Reported</span>
+                                <span style="font-size: 13px; color: var(--text-gray); display: block;">For Robert Johnson</span>
+                            </div>
+                            <span style="font-size: 13px; color: var(--text-gray);">15 min ago</span>
+                        </div>
+                    </div>
+                    <div style="padding: 12px 0; border-bottom: 1px solid var(--off-white);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-weight: 600;">Case Updated</span>
+                                <span style="font-size: 13px; color: var(--text-gray); display: block;">Maria Garcia found safe</span>
+                            </div>
+                            <span style="font-size: 13px; color: var(--text-gray);">1 hour ago</span>
+                        </div>
+                    </div>
+                    <div style="padding: 12px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-weight: 600;">New Profile</span>
+                                <span style="font-size: 13px; color: var(--text-gray); display: block;">Elderly profile added</span>
+                            </div>
+                            <span style="font-size: 13px; color: var(--text-gray);">3 hours ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title"><i class="fas fa-exclamation-triangle" style="color: #F39C12;"></i> Pending Actions</span>
+                    <span style="font-size: 13px; color: var(--text-gray);">Needs review</span>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                    <div style="padding: 12px 0; border-bottom: 1px solid var(--off-white);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-weight: 600;">Sightings</span>
+                                <span style="font-size: 13px; color: var(--text-gray); display: block;">23 pending verification</span>
+                            </div>
+                            <a href="manage-sightings.html" class="btn btn-primary btn-sm">Review</a>
+                        </div>
+                    </div>
+                    <div style="padding: 12px 0; border-bottom: 1px solid var(--off-white);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-weight: 600;">Reports</span>
+                                <span style="font-size: 13px; color: var(--text-gray); display: block;">5 new reports</span>
+                            </div>
+                            <a href="manage-reports.html" class="btn btn-primary btn-sm">Review</a>
+                        </div>
+                    </div>
+                    <div style="padding: 12px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-weight: 600;">User Reports</span>
+                                <span style="font-size: 13px; color: var(--text-gray); display: block;">2 flagged users</span>
+                            </div>
+                            <a href="manage-users.html" class="btn btn-primary btn-sm">Review</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- ============================================================
+FOOTER
+============================================================ -->
+<footer class="footer">
+    <div class="container">
+        <div>
+            <h4><i class="fas fa-shield-alt" style="color: var(--primary);"></i> CarePath</h4>
+            <p>Admin Panel - Manage the platform and help reunite families.</p>
+        </div>
+        <div>
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="manage-users.html">Users</a></li>
+                <li><a href="manage-cases.html">Cases</a></li>
+                <li><a href="manage-reports.html">Reports</a></li>
+                <li><a href="manage-sightings.html">Sightings</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>Support</h4>
+            <ul>
+                <li><a href="mailto:admin@CarePath.com">admin@CarePath.com</a></li>
+                <li><a href="tel:+11234567890">+1 (123) 456-7890</a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 CarePath. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<!-- ============================================================
+SCRIPTS
+============================================================ -->
+<script>
+    // ============================================================
+    // HAMBURGER TOGGLE
+    // ============================================================
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', function() {
+        this.classList.toggle('active');
+        navLinks.classList.toggle('open');
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('open');
+        });
+    });
+
+    // ============================================================
+    // TOAST NOTIFICATION SYSTEM
+    // ============================================================
+    function showToast(title, message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            info: 'fa-info-circle'
+        };
+        
+        toast.innerHTML = `
+            <div class="toast-icon"><i class="fas ${icons[type] || icons.info}"></i></div>
+            <div class="toast-content">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+            <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+        `;
+        
+        container.appendChild(toast);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(20px)';
+                setTimeout(() => {
+                    if (toast.parentElement) toast.remove();
+                }, 300);
+            }
+        }, 5000);
+    }
+
+    // ============================================================
+    // DASHBOARD FUNCTIONS
+    // ============================================================
+    function refreshData() {
+        showToast('Info', 'Refreshing dashboard data...', 'info');
+        setTimeout(() => {
+            location.reload();
+        }, 1000);
+    }
+
+    function exportData() {
+        showToast('Success', 'Data export initiated. You will receive an email shortly.', 'success');
+    }
+
+    // ============================================================
+    // ANIMATE NUMBERS ON LOAD
+    // ============================================================
+    function animateNumbers() {
+        const targets = [
+            { id: 'totalUsers', target: 1280 },
+            { id: 'activeCases', target: 156 },
+            { id: 'totalSightings', target: 342 },
+            { id: 'pendingSightings', target: 23 }
+        ];
+
+        targets.forEach(({ id, target }) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            let current = 0;
+            const increment = Math.ceil(target / 40);
+            const interval = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(interval);
+                }
+                el.textContent = current;
+            }, 30);
+        });
+    }
+
+    // ============================================================
+    // PREVENT ZOOM ON DOUBLE TAP (iOS)
+    // ============================================================
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) e.preventDefault();
+        lastTouchEnd = now;
+    }, false);
+
+    // ============================================================
+    // VIEWPORT HEIGHT FOR MOBILE
+    // ============================================================
+    function setVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+    }
+    setVH();
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', () => setTimeout(setVH, 200));
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    setTimeout(animateNumbers, 300);
+    
+    // Welcome toast
+    setTimeout(() => {
+        showToast('Welcome!', 'You have 23 pending sightings to review.', 'info');
+    }, 800);
+</script>
+
+</body>
+</html>

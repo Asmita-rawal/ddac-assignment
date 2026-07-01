@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Case Details - CarePath</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    
+    <style>
+        /* ============================================================
+        CSS VARIABLES & RESET
+        ============================================================ */
+        :root {
+            --primary: #87CEEB;
+            --primary-dark: #5BA3C9;
+            --primary-light: #D4EEF7;
+            --secondary: #90EE90;
+            --secondary-dark: #6BCB6B;
+            --secondary-light: #D4F5D4;
+            --white: #FFFFFF;
+            --off-white: #F8F9FA;
+            --off-white-light: #F0F2F5;
+            --off-white-dark: #E5E7EB;
+            --text-dark: #1a2a3a;
+            --text-gray: #4a5a6a;
+            --text-light: #6b7a8a;
+            --shadow: 0 10px 40px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 60px rgba(0,0,0,0.12);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --radius-xs: 8px;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --danger: #dc2626;
+            --success: #16a34a;
+            --warning: #d97706;
+            --skyblue-gradient: linear-gradient(135deg, #87CEEB 0%, #5BA3C9 100%);
+            --border-color: #E5E7EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--off-white);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        img { max-width: 100%; display: block; }
+        ul { list-style: none; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+
+        /* ============================================================
+        SCROLLBAR
+        ============================================================ */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--off-white); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
+
+        /* ============================================================
+        ANIMATIONS
+        ============================================================ */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .fade-in { animation: fadeInUp 0.8s ease forwards; }
+
+        /* ============================================================
+        UTILITY CLASSES
+        ============================================================ */
+        .mt-2 { margin-top: 12px; }
+        .mt-3 { margin-top: 20px; }
+        .mt-4 { margin-top: 32px; }
+        .mt-5 { margin-top: 48px; }
+        .mb-3 { margin-bottom: 20px; }
+        .mb-4 { margin-bottom: 32px; }
+        .mb-5 { margin-bottom: 48px; }
+
+        .text-center { text-align: center; }
+        .text-muted { color: var(--text-gray); }
+        .required { color: var(--danger); font-weight: 700; }
+
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-light);
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+            margin: 8px 0 16px;
+        }
+
+        /* ============================================================
+        BUTTONS
+        ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            min-width: 120px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(135, 206, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(135, 206, 235, 0.5);
+        }
+
+        .btn-primary:active { transform: scale(0.97); }
+
+        .btn-secondary {
+            background: var(--off-white);
+            color: var(--text-dark);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-dark);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            background: var(--off-white);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-sm { padding: 6px 16px; font-size: 13px; min-width: auto; }
+        .btn-lg { padding: 14px 32px; font-size: 17px; min-height: 50px; }
+        .btn-block { width: 100%; justify-content: center; }
+
+        /* ============================================================
+        NAVBAR
+        ============================================================ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(135, 206, 235, 0.15);
+            padding: 0;
+            animation: slideDown 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+            border-bottom-color: rgba(135, 206, 235, 0.25);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover { transform: scale(1.02); }
+
+        .navbar-brand .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .navbar-brand .brand-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand .brand-name .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-brand .brand-version {
+            font-size: 9px;
+            font-weight: 500;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-gray);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2.5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover::before,
+        .nav-links a.active::before { width: 60%; }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text-dark);
+            background: rgba(135, 206, 235, 0.08);
+        }
+
+        .nav-links .btn {
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            min-width: auto;
+        }
+
+        .nav-links .btn::before { display: none; }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger:hover { background: rgba(135, 206, 235, 0.08); }
+        .hamburger:active { transform: scale(0.92); }
+
+        .hamburger span {
+            display: block;
+            width: 26px;
+            height: 2.5px;
+            background: var(--text-dark);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ============================================================
+        PAGE HEADER
+        ============================================================ */
+        .page-header {
+            background: var(--skyblue-gradient);
+            padding: 100px 0 40px;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .page-header .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,0.8);
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition);
+            margin-bottom: 16px;
+        }
+
+        .page-header .back-link:hover {
+            color: var(--white);
+            gap: 12px;
+        }
+
+        /* ============================================================
+        CASE DETAILS
+        ============================================================ */
+        .case-details {
+            padding: 30px 0 60px;
+        }
+
+        /* ===== Left Column ===== */
+        .case-image-container {
+            background: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .case-image-container:hover {
+            border-color: rgba(135, 206, 235, 0.3);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .case-image-container .case-image {
+            width: 100%;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .case-image-container .case-image .status-overlay {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .case-image-container .case-image .status-overlay.urgent {
+            background: rgba(220, 38, 38, 0.9);
+            animation: statusPulse 1.5s ease-in-out infinite;
+        }
+
+        .case-image-container .case-image .status-overlay.active {
+            background: rgba(217, 119, 6, 0.9);
+        }
+
+        .case-image-container .case-image .status-overlay.found {
+            background: rgba(22, 163, 74, 0.9);
+        }
+
+        .case-image-container .case-info {
+            padding: 24px;
+        }
+
+        .case-image-container .case-info .case-name {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .case-image-container .case-info .case-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        .case-image-container .case-info .case-meta i {
+            margin-right: 4px;
+            color: var(--primary-dark);
+        }
+
+        .case-image-container .case-info .location-box {
+            background: var(--off-white);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .case-image-container .case-info .location-box strong {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .case-image-container .case-info .location-box p {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+
+        /* ===== Right Column ===== */
+        .case-detail-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            margin-bottom: 20px;
+        }
+
+        .case-detail-card:hover {
+            border-color: rgba(135, 206, 235, 0.3);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .case-detail-card .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .case-detail-card .card-title i { color: var(--primary-dark); }
+
+        .case-detail-card .detail-item {
+            margin-bottom: 12px;
+        }
+
+        .case-detail-card .detail-item:last-child { margin-bottom: 0; }
+
+        .case-detail-card .detail-item strong {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .case-detail-card .detail-item p {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+
+        /* ===== Contact Card ===== */
+        .contact-card {
+            background: linear-gradient(135deg, var(--secondary-light), var(--primary-light));
+            border-radius: var(--radius);
+            padding: 24px;
+            border: 1px solid rgba(135, 206, 235, 0.2);
+        }
+
+        .contact-card .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-card .contact-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .contact-card .contact-tags span {
+            padding: 6px 16px;
+            background: var(--white);
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .contact-card .emergency-box {
+            background: var(--white);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border-left: 3px solid var(--danger);
+        }
+
+        .contact-card .emergency-box strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .contact-card .emergency-box p {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .action-buttons .btn { flex: 1; min-width: 140px; }
+
+        /* ============================================================
+        SIGHTINGS SECTION
+        ============================================================ */
+        .sightings-section { margin-top: 40px; }
+
+        .sightings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .sightings-header h2 { font-size: 24px; font-weight: 800; }
+        .sightings-header h2 span { color: var(--primary-dark); }
+
+        .sighting-item {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .sighting-item:hover {
+            border-color: rgba(135, 206, 235, 0.3);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .sighting-item .sighting-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .sighting-item .sighting-top .reporter {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .sighting-item .sighting-top .reporter i {
+            color: var(--primary-dark);
+            margin-right: 6px;
+        }
+
+        .sighting-item .sighting-top .sighting-status {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 50px;
+        }
+
+        .sighting-item .sighting-top .sighting-status.pending {
+            background: #fef3c7;
+            color: var(--warning);
+        }
+
+        .sighting-item .sighting-top .sighting-status.confirmed {
+            background: var(--secondary-light);
+            color: var(--secondary-dark);
+        }
+
+        .sighting-item .sighting-top .sighting-time {
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        .sighting-item .sighting-top .sighting-time i { margin-right: 4px; }
+
+        .sighting-item .sighting-desc {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+
+        /* ============================================================
+        SHARE SECTION
+        ============================================================ */
+        .share-section { margin-top: 30px; }
+
+        .share-card {
+            background: var(--off-white);
+            border-radius: var(--radius);
+            padding: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .share-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .share-card p {
+            color: var(--text-gray);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .share-buttons button {
+            padding: 8px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            background: var(--white);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .share-buttons button:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .share-buttons button.facebook:hover {
+            border-color: #1877f2;
+            background: #e7f0ff;
+            color: #1877f2;
+        }
+
+        .share-buttons button.twitter:hover {
+            border-color: #1da1f2;
+            background: #e8f4fd;
+            color: #1da1f2;
+        }
+
+        .share-buttons button.whatsapp:hover {
+            border-color: #25d366;
+            background: #e8f9f0;
+            color: #25d366;
+        }
+
+        .share-buttons button.copy:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        /* ============================================================
+        TOAST NOTIFICATIONS
+        ============================================================ */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .toast {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: fadeInUp 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+
+        .toast .toast-icon { font-size: 20px; flex-shrink: 0; }
+        .toast .toast-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0 4px;
+            transition: var(--transition);
+        }
+        .toast .toast-close:hover { color: var(--white); }
+        .toast.removing {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 0.4s ease;
+        }
+
+        /* ============================================================
+        FOOTER
+        ============================================================ */
+        .footer {
+            background: var(--text-dark);
+            color: rgba(255,255,255,0.7);
+            padding: 40px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer h4 {
+            color: var(--white);
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .footer p {
+            font-size: 14px;
+            max-width: 300px;
+        }
+
+        .footer ul li { margin-bottom: 6px; }
+        .footer ul li a {
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        .footer ul li a:hover { color: var(--white); }
+
+        .footer-bottom {
+            grid-column: 1 / -1;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 16px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* ============================================================
+        RESPONSIVE
+        ============================================================ */
+        @media (max-width: 992px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .footer .container { grid-template-columns: 1fr 1fr; }
+            .case-image-container .case-image { height: 250px; }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(255,255,255,0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 24px 20px;
+                gap: 12px;
+                transform: translateY(-120%);
+                transition: var(--transition);
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+                align-items: stretch;
+                text-align: center;
+            }
+
+            .nav-links.open { transform: translateY(0); }
+            .nav-links .btn { justify-content: center; }
+
+            .navbar .container { padding: 10px 16px; }
+            .navbar-brand .brand-name { font-size: 18px; }
+
+            .page-header { padding: 80px 0 30px; }
+            .page-header h1 { font-size: 30px; }
+
+            .case-image-container .case-image { height: 200px; font-size: 50px; }
+            .case-image-container .case-info .case-name { font-size: 22px; }
+
+            .action-buttons { flex-direction: column; }
+            .action-buttons .btn { flex: 1; width: 100%; }
+
+            .sighting-item .sighting-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .share-buttons { flex-direction: column; }
+            .share-buttons button { width: 100%; justify-content: center; }
+
+            .footer .container { grid-template-columns: 1fr; gap: 24px; text-align: center; }
+            .footer p { max-width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0 16px; }
+            .page-header h1 { font-size: 26px; }
+            .section-title { font-size: 24px; }
+            .card { padding: 16px; }
+            .case-image-container .case-image { height: 160px; font-size: 40px; }
+            .btn { font-size: 14px; padding: 8px 18px; min-width: auto; }
+            .case-detail-card { padding: 16px; }
+            .contact-card { padding: 16px; }
+            .sighting-item { padding: 16px; }
+            .case-image-container .case-info .case-meta { gap: 12px; font-size: 13px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    NAVBAR
+    ============================================================ -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="../index.html" class="navbar-brand">
+                <div class="brand-text">
+                    <span class="brand-name">Safe<span class="highlight">Track</span></span>
+                    <span class="brand-version">v1.0</span>
+                </div>
+            </a>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../about.html">About</a></li>
+                <li><a href="active-cases.html" class="active">Cases</a></li>
+                <li><a href="safety-guide.html">Safety Guide</a></li>
+                <li><a href="../login.html" class="btn btn-primary btn-sm">Login</a></li>
+                <li><a href="../register.html" class="btn btn-secondary btn-sm">Register</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ============================================================
+    PAGE HEADER
+    ============================================================ -->
+    <section class="page-header">
+        <div class="container">
+            <a href="active-cases.html" class="back-link fade-in">
+                <i class="fas fa-arrow-left"></i> Back to Cases
+            </a>
+            <div class="fade-in" id="caseHeader">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    CASE DETAILS
+    ============================================================ -->
+    <section class="case-details">
+        <div class="container" id="caseDetails">
+            <!-- Dynamic content -->
+        </div>
+    </section>
+
+    <!-- ============================================================
+    FOOTER
+    ============================================================ -->
+    <footer class="footer">
+        <div class="container">
+            <div>
+                <h4>CarePath</h4>
+                <p>A community-driven platform dedicated to raising awareness and helping locate missing elderly individuals with Alzheimer's.</p>
+            </div>
+            <div>
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../about.html">About</a></li>
+                    <li><a href="active-cases.html">Cases</a></li>
+                    <li><a href="safety-guide.html">Safety Guide</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="mailto:help@carepath.com"><i class="fas fa-envelope"></i> help@carepath.com</a></li>
+                    <li><a href="tel:+11234567890"><i class="fas fa-phone"></i> +1 (123) 456-7890</a></li>
+                    <li><a href="#"><i class="fab fa-twitter"></i> @CarePath</a></li>
+                    <li><a href="#"><i class="fab fa-facebook"></i> @CarePath</a></li>
+                </ul>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2025 CarePath. All rights reserved. Made with <i class="fas fa-heart" style="color: var(--danger);"></i> for the community.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================
+    TOAST CONTAINER
+    ============================================================ -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ============================================================
+        // DATA
+        // ============================================================
+        const caseData = {
+            1: {
+                id: 1,
+                name: "Robert Johnson",
+                age: 72,
+                gender: "Male",
+                location: "Downtown - Main Street & 3rd Avenue",
+                status: "urgent",
+                lastSeen: "June 20, 2025",
+                description: "Robert was last seen walking towards the downtown area. He was disoriented and asked strangers for directions. He has a history of wandering and has been missing before. He suffers from Alzheimer's Disease Stage 4 and Diabetes Type 2.",
+                clothing: "Blue denim jacket, gray sweatpants, white tennis shoes, blue baseball cap",
+                features: "Wears reading glasses, has a scar on his right cheek, walks with a slight limp",
+                caregiver: "Sarah Johnson",
+                phone: "+1 (555) 123-4567",
+                relationship: "Daughter",
+                color: "#D4EEF7",
+                sightings: [
+                    { reporter: "Alice Brown", status: "pending", time: "2 hours ago", description: "Saw a man matching Robert's description waiting at the bus stop at Main Street & 5th Ave. He seemed confused and asked what time the bus arrives." },
+                    { reporter: "Anonymous", status: "pending", time: "5 hours ago", description: "A man matching the description was seen reading newspapers at the Downtown Library. He left around 5 PM." },
+                    { reporter: "Mark Wilson", status: "confirmed", time: "8 hours ago", description: "Confirmed sighting at the Riverside Park. Robert was feeding ducks and appeared calm. He left the park around 3 PM." }
+                ]
+            },
+            2: {
+                id: 2,
+                name: "Maria Garcia",
+                age: 78,
+                gender: "Female",
+                location: "Riverside Park Entrance",
+                status: "urgent",
+                lastSeen: "June 22, 2025",
+                description: "Maria was last seen walking near the park entrance. She was wearing a floral dress and carrying a brown purse. She has dementia and may not remember her address or how to get home.",
+                clothing: "Floral dress, brown purse, white sandals",
+                features: "Wears a silver bracelet, has a mole on her left cheek, speaks Spanish and English",
+                caregiver: "Carlos Garcia",
+                phone: "+1 (555) 987-6543",
+                relationship: "Son",
+                color: "#FED7D7",
+                sightings: [
+                    { reporter: "David Chen", status: "confirmed", time: "3 hours ago", description: "Maria was seen at the park entrance talking to a young couple. She seemed friendly but confused about directions." },
+                    { reporter: "Lisa Thompson", status: "pending", time: "1 hour ago", description: "Maria was spotted walking along Riverside Drive heading east. She was wearing a floral dress and carrying a purse." }
+                ]
+            },
+            3: {
+                id: 3,
+                name: "James Thompson",
+                age: 65,
+                gender: "Male",
+                location: "Oakwood Shopping Center",
+                status: "active",
+                lastSeen: "June 23, 2025",
+                description: "James was last seen near the Oakwood Shopping Center. He requires daily medication for a heart condition and may be disoriented. He was last seen near the food court area.",
+                clothing: "Blue polo shirt, khaki pants, brown shoes, glasses",
+                features: "Wears glasses, has a hearing aid in his right ear, walks with a cane",
+                caregiver: "Mary Thompson",
+                phone: "+1 (555) 456-7890",
+                relationship: "Wife",
+                color: "#D4F5D4",
+                sightings: [
+                    { reporter: "John Smith", status: "pending", time: "4 hours ago", description: "James was seen at the food court eating lunch. He left around 2 PM heading towards the parking lot." }
+                ]
+            },
+            4: {
+                id: 4,
+                name: "Helen Wilson",
+                age: 81,
+                gender: "Female",
+                location: "Sunset Boulevard & Maple St",
+                status: "active",
+                lastSeen: "June 21, 2025",
+                description: "Helen was last seen at the intersection of Sunset Boulevard and Maple Street. She was wearing a purple sweater and black pants. She has a tendency to wander and gets confused easily.",
+                clothing: "Purple sweater, black pants, white shoes, blue scarf",
+                features: "Wears a gold wedding ring, has a birthmark on her left arm",
+                caregiver: "David Wilson",
+                phone: "+1 (555) 234-5678",
+                relationship: "Son",
+                color: "#FED7F8",
+                sightings: []
+            },
+            5: {
+                id: 5,
+                name: "William Brown",
+                age: 74,
+                gender: "Male",
+                location: "Central Park - North Entrance",
+                status: "found",
+                lastSeen: "June 19, 2025",
+                description: "Found safe at the park. Has been reunited with family. Thank you for your help!",
+                clothing: "N/A",
+                features: "N/A",
+                caregiver: "Emily Brown",
+                phone: "+1 (555) 345-6789",
+                relationship: "Daughter",
+                color: "#D4F5D4",
+                sightings: [
+                    { reporter: "Park Ranger", status: "confirmed", time: "1 day ago", description: "William was found safe at the park. He was hungry and confused but otherwise in good health." }
+                ]
+            },
+            6: {
+                id: 6,
+                name: "Patricia Davis",
+                age: 69,
+                gender: "Female",
+                location: "Eastside Community Center",
+                status: "active",
+                lastSeen: "June 24, 2025",
+                description: "Patricia was last seen leaving the community center around 3 PM. She was wearing a green jacket and carrying a blue bag. She has early-stage Alzheimer's.",
+                clothing: "Green jacket, blue bag, jeans, tennis shoes",
+                features: "Wears a cross necklace, has a tattoo of a flower on her wrist",
+                caregiver: "Robert Davis",
+                phone: "+1 (555) 567-8901",
+                relationship: "Husband",
+                color: "#D4EEF7",
+                sightings: []
+            }
+        };
+
+        // ============================================================
+        // GET CASE ID FROM URL
+        // ============================================================
+        function getCaseId() {
+            const params = new URLSearchParams(window.location.search);
+            return parseInt(params.get('id')) || 1;
+        }
+
+        // ============================================================
+        // RENDER CASE DETAILS
+        // ============================================================
+        function renderCaseDetails() {
+            const id = getCaseId();
+            const caseItem = caseData[id];
+
+            if (!caseItem) {
+                document.getElementById('caseDetails').innerHTML = `
+                    <div class="card text-center" style="padding: 60px 20px;">
+                        <i class="fas fa-search" style="font-size: 48px; color: var(--text-gray); margin-bottom: 16px;"></i>
+                        <h3>Case not found</h3>
+                        <p style="color: var(--text-gray);">The case you're looking for doesn't exist or has been removed.</p>
+                        <a href="active-cases.html" class="btn btn-primary mt-3">Back to Cases</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Header
+            document.getElementById('caseHeader').innerHTML = `
+                <h1>${caseItem.name}</h1>
+                <div style="width: 60px; height: 4px; background: rgba(255,255,255,0.5); border-radius: 4px; margin: 8px 0 12px;"></div>
+                <p>Case #C-2025-${String(id).padStart(3, '0')} • Last seen: ${caseItem.lastSeen}</p>
+            `;
+
+            // Main content
+            const statusClass = caseItem.status;
+            const statusIcon = caseItem.status === 'urgent' ? 'fa-exclamation-triangle' :
+                              caseItem.status === 'active' ? 'fa-clock' : 'fa-check-circle';
+            const statusLabel = caseItem.status === 'urgent' ? 'Urgent' :
+                               caseItem.status === 'active' ? 'Active' : 'Found';
+
+            const sightingsHTML = caseItem.sightings && caseItem.sightings.length > 0 ?
+                caseItem.sightings.map(s => `
+                    <div class="sighting-item fade-in">
+                        <div class="sighting-top">
+                            <div>
+                                <span class="reporter"><i class="fas fa-user"></i> ${s.reporter}</span>
+                                <span class="sighting-status ${s.status}">${s.status === 'pending' ? '⏳ Pending' : '✅ Confirmed'}</span>
+                            </div>
+                            <span class="sighting-time"><i class="far fa-clock"></i> ${s.time}</span>
+                        </div>
+                        <p class="sighting-desc">${s.description}</p>
+                    </div>
+                `).join('') :
+                '<p style="color: var(--text-gray); text-align: center; padding: 20px;">No sightings reported yet. Be the first to report a sighting!</p>';
+
+            document.getElementById('caseDetails').innerHTML = `
+                <div class="grid-2">
+                    <!-- Left Column -->
+                    <div class="case-image-container fade-in">
+                        <div class="case-image" style="background: linear-gradient(135deg, ${caseItem.color}, ${caseItem.color}dd);">
+                            <i class="fas fa-user-circle" style="font-size: 100px; color: var(--text-gray); opacity: 0.4;"></i>
+                            <div class="status-overlay ${caseItem.status}">
+                                <i class="fas ${statusIcon}"></i> ${statusLabel}
+                            </div>
+                        </div>
+                        <div class="case-info">
+                            <h1 class="case-name">${caseItem.name}</h1>
+                            <div class="case-meta">
+                                <span><i class="far fa-calendar-alt"></i> Missing since: ${caseItem.lastSeen}</span>
+                                <span><i class="fas fa-user"></i> Age: ${caseItem.age}</span>
+                                <span><i class="fas fa-venus-mars"></i> ${caseItem.gender}</span>
+                                <span><i class="fas fa-hashtag"></i> Case #C-2025-${String(id).padStart(3, '0')}</span>
+                            </div>
+                            <div class="location-box">
+                                <strong>📍 Last Seen Location</strong>
+                                <p>${caseItem.location}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div>
+                        <!-- Case Details -->
+                        <div class="case-detail-card fade-in">
+                            <div class="card-title"><i class="fas fa-clipboard-list"></i> Case Details</div>
+                            <div class="detail-item">
+                                <strong>Description</strong>
+                                <p>${caseItem.description}</p>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Clothing Description</strong>
+                                <p>${caseItem.clothing}</p>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Distinctive Features</strong>
+                                <p>${caseItem.features}</p>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="contact-card fade-in">
+                            <div class="card-title"><i class="fas fa-phone-alt"></i> Contact Information</div>
+                            <div class="contact-tags">
+                                <span><i class="fas fa-user-md"></i> Caregiver: ${caseItem.caregiver}</span>
+                                <span><i class="fas fa-phone"></i> ${caseItem.phone}</span>
+                                <span><i class="fas fa-heart"></i> ${caseItem.relationship}</span>
+                            </div>
+                            <div class="emergency-box">
+                                <strong>🚨 Emergency Contact</strong>
+                                <p>If you see ${caseItem.name}, please call ${caseItem.caregiver} immediately.</p>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons fade-in">
+                            <a href="submit-sighting.html?report=${caseItem.id}" class="btn btn-primary">
+                                <i class="fas fa-map-pin"></i> Report a Sighting
+                            </a>
+                            <a href="tel:911" class="btn btn-danger">
+                                <i class="fas fa-phone"></i> Call 911
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sightings Section -->
+                <div class="sightings-section fade-in">
+                    <div class="sightings-header">
+                        <h2>Recent <span>Sightings</span></h2>
+                        <a href="submit-sighting.html?report=${caseItem.id}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i> Report Sighting
+                        </a>
+                    </div>
+                    ${sightingsHTML}
+                </div>
+
+                <!-- Share Section -->
+                <div class="share-section fade-in">
+                    <div class="share-card">
+                        <h3><i class="fas fa-share-alt"></i> Share This Case</h3>
+                        <p>Help spread the word. Share this case with your community to increase the chances of finding ${caseItem.name}.</p>
+                        <div class="share-buttons">
+                            <button class="facebook" onclick="shareOnFacebook()">
+                                <i class="fab fa-facebook-f"></i> Facebook
+                            </button>
+                            <button class="twitter" onclick="shareOnTwitter()">
+                                <i class="fab fa-twitter"></i> Twitter
+                            </button>
+                            <button class="whatsapp" onclick="shareOnWhatsApp()">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                            <button class="copy" onclick="copyLink()">
+                                <i class="fas fa-copy"></i> Copy Link
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================================
+        // SHARE FUNCTIONS
+        // ============================================================
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icons = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle'
+            };
+            
+            toast.innerHTML = `
+                <span class="toast-icon"><i class="${icons[type] || icons.success}"></i></span>
+                <span>${message}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('removing');
+                setTimeout(() => toast.remove(), 400);
+            }, 5000);
+        }
+
+        function shareOnFacebook() {
+            const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+            window.open(url, '_blank', 'width=600,height=400');
+            showToast('Shared to Facebook!', 'success');
+        }
+
+        function shareOnTwitter() {
+            const text = `Help find ${caseData[getCaseId()]?.name || 'this missing person'} - Please share!`;
+            const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`;
+            window.open(url, '_blank', 'width=600,height=400');
+            showToast('Shared to Twitter!', 'success');
+        }
+
+        function shareOnWhatsApp() {
+            const text = `Help find ${caseData[getCaseId()]?.name || 'this missing person'} - Please share!`;
+            const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + window.location.href)}`;
+            window.open(url, '_blank', 'width=600,height=400');
+            showToast('Shared to WhatsApp!', 'success');
+        }
+
+        function copyLink() {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    showToast('Link copied to clipboard!', 'success');
+                }).catch(() => {
+                    fallbackCopy();
+                });
+            } else {
+                fallbackCopy();
+            }
+        }
+
+        function fallbackCopy() {
+            const textArea = document.createElement('textarea');
+            textArea.value = window.location.href;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Link copied to clipboard!', 'success');
+            } catch (err) {
+                showToast('Failed to copy link. Please copy manually.', 'error');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // ============================================================
+        // NAVBAR TOGGLE
+        // ============================================================
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('open');
+            document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // ============================================================
+        // NAVBAR SCROLL
+        // ============================================================
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }, { passive: true });
+
+        // ============================================================
+        // KEYBOARD SHORTCUTS
+        // ============================================================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        renderCaseDetails();
+
+        console.log('%c📋 CarePath - Case Details', 'font-size: 24px; font-weight: bold; color: #87CEEB;');
+        console.log('%c📊 Showing case: ' + (caseData[getCaseId()]?.name || 'Unknown'), 'font-size: 14px; color: #4a5a6a;');
+        console.log('✅ Page loaded successfully!');
+    </script>
+
+</body>
+</html>

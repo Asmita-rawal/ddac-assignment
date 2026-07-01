@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Caregiver Dashboard - CarePath</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    
+    <style>
+        /* ============================================================
+           CSS VARIABLES & RESET
+           ============================================================ */
+        :root {
+            --primary: #87CEEB;
+            --primary-dark: #5BA3C9;
+            --primary-light: #D4EEF7;
+            --secondary: #90EE90;
+            --secondary-dark: #6BCB6B;
+            --secondary-light: #D4F5D4;
+            --white: #FFFFFF;
+            --off-white: #F8F9FA;
+            --off-white-dark: #E9ECEF;
+            --text-dark: #1a2a3a;
+            --text-gray: #6B7A8A;
+            --text-muted: #4a5a6a;
+            --shadow: 0 10px 40px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 60px rgba(0,0,0,0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --nav-bg: rgba(255,255,255,0.92);
+            --card-bg: rgba(255,255,255,0.85);
+            --skyblue-gradient: linear-gradient(135deg, #87CEEB, #5BA3C9);
+            --light-green-gradient: linear-gradient(135deg, #90EE90, #6BCB6B);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--off-white);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: linear-gradient(135deg, var(--off-white) 0%, var(--primary-light) 50%, var(--secondary-light) 100%);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* ===== Background Decor ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -40%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(135,206,235,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatBg 10s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -30%;
+            left: -15%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(144,238,144,0.10) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatBgReverse 12s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-25px) scale(1.05); }
+        }
+        @keyframes floatBgReverse {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(25px) scale(1.05); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* ============================================================
+           UTILITY CLASSES
+           ============================================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+        .flex {
+            display: flex;
+            align-items: center;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+        .gap-1 { gap: 8px; }
+        .gap-2 { gap: 12px; }
+        .gap-3 { gap: 16px; }
+        .mt-2 { margin-top: 12px; }
+        .mt-3 { margin-top: 20px; }
+        .mt-4 { margin-top: 32px; }
+        .mb-3 { margin-bottom: 20px; }
+        .mb-4 { margin-bottom: 32px; }
+        .mb-5 { margin-bottom: 40px; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 800;
+        }
+        .section-divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            margin: 6px 0 8px;
+        }
+        .section-subtitle {
+            color: var(--text-gray);
+            font-size: 15px;
+        }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 22px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            min-height: 42px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 16px rgba(135,206,235,0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(135,206,235,0.4);
+        }
+        .btn-secondary {
+            background: var(--white);
+            color: var(--text-dark);
+            border: 2px solid var(--off-white-dark);
+        }
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--text-dark);
+            border: 2px solid var(--off-white-dark);
+        }
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 13px;
+            min-height: 34px;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        /* ============================================================
+           NAVBAR
+           ============================================================ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+        .navbar-brand i {
+            color: var(--primary);
+            font-size: 28px;
+        }
+        .navbar-brand span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            font-size: 14px;
+            margin-left: 2px;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            font-size: 14px;
+            transition: var(--transition);
+            padding: 6px 0;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: var(--transition);
+        }
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        .nav-links a.active {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+        .nav-links a:hover {
+            color: var(--text-dark);
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+        .hamburger span {
+            width: 26px;
+            height: 3px;
+            background: var(--text-dark);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* ============================================================
+           DASHBOARD HEADER
+           ============================================================ */
+        .dashboard-header {
+            background: linear-gradient(135deg, #87CEEB, #5BA3C9);
+            padding: 40px 0 30px;
+            color: white;
+            margin-top: 60px;
+        }
+        .dashboard-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+        }
+        .dashboard-header p {
+            opacity: 0.9;
+        }
+
+        /* ============================================================
+           STAT CARDS
+           ============================================================ */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .card-stat {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--radius-sm);
+            padding: 20px 24px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            transition: var(--transition);
+        }
+        .card-stat:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+        .card-stat .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.2;
+            animation: countUp 0.6s ease;
+        }
+        .card-stat .stat-label {
+            font-size: 14px;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+        .card-stat.green { border-left-color: var(--secondary-dark); }
+        .card-stat.gold { border-left-color: #F39C12; }
+        .card-stat.red { border-left-color: #E74C3C; }
+        .card-stat.purple { border-left-color: #8B5CF6; }
+
+        /* ============================================================
+           QUICK ACTION CARDS
+           ============================================================ */
+        .quick-action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .quick-action-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            padding: 24px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--text-dark);
+            border: 2px solid transparent;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+        }
+        .quick-action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+        .quick-action-card .icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .quick-action-card .label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .quick-action-card .sub-label {
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-top: 4px;
+        }
+
+        /* ============================================================
+           CARDS
+           ============================================================ */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            padding: 20px 22px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            transition: var(--transition);
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        /* ============================================================
+           ACTIVITY TIMELINE
+           ============================================================ */
+        .activity-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        .activity-timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--primary-light);
+        }
+        .activity-item {
+            position: relative;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--off-white-dark);
+        }
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 16px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .activity-item.urgent::before {
+            background: #E74C3C;
+            box-shadow: 0 0 0 2px #E74C3C;
+        }
+        .activity-item.success::before {
+            background: var(--secondary-dark);
+            box-shadow: 0 0 0 2px var(--secondary-dark);
+        }
+        .activity-item .time {
+            font-size: 12px;
+            color: var(--text-gray);
+        }
+        .activity-item .title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .activity-item .description {
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        /* ============================================================
+           STATUS BADGES
+           ============================================================ */
+        .status-badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .status-badge.urgent {
+            background: #F1948A;
+            color: #922B21;
+        }
+        .status-badge.active {
+            background: #FFEAA7;
+            color: #B7950B;
+        }
+        .status-badge.found {
+            background: #A9DFBF;
+            color: #1A7A3A;
+        }
+        .status-badge.pending {
+            background: #AED6F1;
+            color: #1A5276;
+        }
+        .status-badge.verified {
+            background: #A9DFBF;
+            color: #1A7A3A;
+        }
+        .status-badge.new {
+            background: #AED6F1;
+            color: #1A5276;
+        }
+
+        /* ============================================================
+           CASE CARDS
+           ============================================================ */
+        .case-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: var(--transition);
+            border: 1px solid rgba(255,255,255,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        .case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        .case-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: var(--off-white-dark);
+        }
+        .case-body {
+            padding: 16px 18px;
+            flex: 1;
+        }
+        .case-body h3 {
+            font-size: 17px;
+            font-weight: 700;
+        }
+        .case-meta {
+            font-size: 13px;
+            color: var(--text-gray);
+            margin: 4px 0 8px;
+        }
+        .case-description {
+            font-size: 14px;
+            color: var(--text-gray);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .case-footer {
+            padding: 12px 18px;
+            border-top: 1px solid var(--off-white-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: rgba(248,249,250,0.5);
+        }
+        .case-status {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .case-status.urgent {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+        .case-status.active {
+            background: #fffbeb;
+            color: #92400e;
+        }
+        .case-status.found {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        /* ============================================================
+           ALERT BOXES
+           ============================================================ */
+        .alert-box {
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            border-left: 3px solid var(--primary);
+        }
+        .alert-box:last-child {
+            margin-bottom: 0;
+        }
+        .alert-box.urgent {
+            background: #FEF9E7;
+            border-left-color: #F39C12;
+        }
+        .alert-box.info {
+            background: #EBF5FB;
+            border-left-color: var(--primary);
+        }
+        .alert-box.success {
+            background: #E8F8F5;
+            border-left-color: var(--secondary-dark);
+        }
+
+        /* ============================================================
+           TOAST NOTIFICATION
+           ============================================================ */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            padding: 14px 20px;
+            box-shadow: var(--shadow-hover);
+            border-left: 4px solid var(--primary);
+            animation: fadeInUp 0.3s ease;
+            min-width: 280px;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toast.success { border-left-color: var(--secondary-dark); }
+        .toast.error { border-left-color: #E74C3C; }
+        .toast.info { border-left-color: var(--primary); }
+        .toast .toast-icon { font-size: 20px; }
+        .toast.success .toast-icon { color: var(--secondary-dark); }
+        .toast.error .toast-icon { color: #E74C3C; }
+        .toast.info .toast-icon { color: var(--primary); }
+        .toast .toast-content { flex: 1; }
+        .toast .toast-title { font-weight: 600; font-size: 14px; }
+        .toast .toast-message { font-size: 13px; color: var(--text-gray); }
+        .toast .toast-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text-gray);
+            padding: 0 4px;
+        }
+        .toast .toast-close:hover { color: var(--text-dark); }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .footer {
+            margin-top: auto;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255,255,255,0.3);
+            padding: 36px 0 20px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        .footer .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 32px;
+        }
+        .footer h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+        .footer p {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+        .footer ul {
+            list-style: none;
+        }
+        .footer ul li {
+            margin-bottom: 4px;
+        }
+        .footer ul a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        .footer ul a:hover {
+            color: var(--text-dark);
+        }
+        .footer-bottom {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--off-white-dark);
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 992px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .quick-action-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .grid-3 {
+                grid-template-columns: 1fr 1fr;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .footer .container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(255,255,255,0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 24px 20px;
+                gap: 12px;
+                transform: translateY(-120%);
+                transition: var(--transition);
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+                align-items: stretch;
+                text-align: center;
+            }
+            .nav-links.open {
+                transform: translateY(0);
+            }
+            .nav-links .btn {
+                justify-content: center;
+            }
+
+            .container {
+                padding: 0 16px;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .quick-action-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-header h1 {
+                font-size: 24px;
+            }
+            .dashboard-header {
+                padding: 30px 0 20px;
+                margin-top: 56px;
+            }
+            .card-stat .stat-number {
+                font-size: 22px;
+            }
+            .card-stat {
+                padding: 16px 18px;
+            }
+            .footer .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                text-align: center;
+            }
+            .flex-between {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            .toast-container {
+                right: 12px;
+                left: 12px;
+            }
+            .toast {
+                min-width: unset;
+                max-width: 100%;
+            }
+            .case-image {
+                height: 140px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .quick-action-grid {
+                grid-template-columns: 1fr;
+            }
+            .card-stat {
+                padding: 14px 14px;
+            }
+            .card-stat .stat-number {
+                font-size: 20px;
+            }
+            .card-stat .stat-label {
+                font-size: 12px;
+            }
+            .btn {
+                font-size: 13px;
+                padding: 8px 16px;
+                min-height: 38px;
+            }
+            .case-image {
+                height: 120px;
+            }
+        }
+
+        @media (max-height: 600px) and (orientation: landscape) {
+            .navbar {
+                padding: 6px 0;
+            }
+            .navbar-brand i {
+                font-size: 22px;
+            }
+            .navbar-brand {
+                font-size: 18px;
+            }
+            .dashboard-header {
+                margin-top: 50px;
+                padding: 20px 0 16px;
+            }
+            .dashboard-header h1 {
+                font-size: 22px;
+            }
+            .dashboard-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+            .card-stat {
+                padding: 12px 14px;
+            }
+            .card-stat .stat-number {
+                font-size: 18px;
+            }
+            .quick-action-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+            .quick-action-card {
+                padding: 16px 12px;
+            }
+            .quick-action-card .icon {
+                font-size: 24px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        @media print {
+            .navbar, .footer { display: none; }
+            .dashboard-header { margin-top: 0; }
+            .card { border: 1px solid #ddd; }
+            .card-stat { border: 1px solid #ddd; }
+            .case-card { border: 1px solid #ddd; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================
+NAVBAR
+============================================================ -->
+<nav class="navbar" id="navbar">
+    <div class="container">
+        <a href="dashboard.html" class="navbar-brand">
+            <i class="fas fa-shield-alt"></i>
+            CarePath
+            <span>Caregiver</span>
+        </a>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="dashboard.html" class="active">Dashboard</a></li>
+            <li><a href="add-elderly.html">Add Elderly</a></li>
+            <li><a href="manage-elderly.html">Manage Profiles</a></li>
+            <li><a href="report-history.html">Reports</a></li>
+            <li><a href="view-sightings.html">Sightings</a></li>
+            <li><a href="../index.html" class="btn btn-danger btn-sm">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ============================================================
+TOAST CONTAINER
+============================================================ -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ============================================================
+DASHBOARD HEADER
+============================================================ -->
+<section class="dashboard-header">
+    <div class="container">
+        <div class="flex-between flex-wrap">
+            <div>
+                <h1>Caregiver Dashboard</h1>
+                <p>Welcome back, John! Here's your overview.</p>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <a href="add-elderly.html" class="btn" style="background: white; color: var(--primary-dark);">
+                    <i class="fas fa-user-plus"></i> Add Elderly Profile
+                </a>
+                <a href="view-sightings.html" class="btn btn-outline" style="border-color: white; color: white;">
+                    <i class="fas fa-eye"></i> Report Sighting
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+STATISTICS CARDS
+============================================================ -->
+<section class="container mt-4">
+    <div class="dashboard-grid">
+        <div class="card-stat">
+            <div class="stat-number" id="totalElderly">4</div>
+            <div class="stat-label">Total Elderly Profiles</div>
+            <div style="font-size: 12px; color: var(--text-gray); margin-top: 4px;">
+                <span style="color: var(--secondary-dark);">↑ 2</span> this month
+            </div>
+        </div>
+        <div class="card-stat green">
+            <div class="stat-number" id="activeCases">2</div>
+            <div class="stat-label">Active Missing Cases</div>
+            <div style="font-size: 12px; color: var(--text-gray); margin-top: 4px;">
+                <span style="color: #E74C3C;">⚠️ 1 urgent</span>
+            </div>
+        </div>
+        <div class="card-stat gold">
+            <div class="stat-number" id="totalSightings">7</div>
+            <div class="stat-label">Total Sightings</div>
+            <div style="font-size: 12px; color: var(--text-gray); margin-top: 4px;">
+                <span style="color: var(--primary);">3 pending</span> verification
+            </div>
+        </div>
+        <div class="card-stat purple">
+            <div class="stat-number" id="foundCases">3</div>
+            <div class="stat-label">Found &amp; Reunited</div>
+            <div style="font-size: 12px; color: var(--text-gray); margin-top: 4px;">
+                <span style="color: var(--secondary-dark);">✅ 1 this week</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+QUICK ACTIONS
+============================================================ -->
+<section class="container mt-4">
+    <h3 style="font-size: 18px; margin-bottom: 16px;">⚡ Quick Actions</h3>
+    <div class="quick-action-grid">
+        <a href="add-elderly.html" class="quick-action-card">
+            <span class="icon">👤</span>
+            <div class="label">Add Elderly</div>
+            <div class="sub-label">Register a new person</div>
+        </a>
+        <a href="manage-elderly.html" class="quick-action-card">
+            <span class="icon">📋</span>
+            <div class="label">Manage Profiles</div>
+            <div class="sub-label">View &amp; edit profiles</div>
+        </a>
+        <a href="view-sightings.html" class="quick-action-card">
+            <span class="icon">👁️</span>
+            <div class="label">Report Sighting</div>
+            <div class="sub-label">Submit a sighting</div>
+        </a>
+        <a href="report-history.html" class="quick-action-card">
+            <span class="icon">📄</span>
+            <div class="label">View Reports</div>
+            <div class="sub-label">Check report history</div>
+        </a>
+    </div>
+</section>
+
+<!-- ============================================================
+RECENT ACTIVITY & ALERTS
+============================================================ -->
+<section class="container mt-4">
+    <div class="grid-2">
+        <!-- Recent Activity -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">📊 Recent Activity</span>
+                <a href="report-history.html" style="font-size: 13px; color: var(--primary-dark); text-decoration: none; font-weight: 600;">View All</a>
+            </div>
+            <div class="activity-timeline">
+                <div class="activity-item urgent">
+                    <div class="flex-between">
+                        <span class="title">🚨 Urgent: Maria Garcia</span>
+                        <span class="time">2 hours ago</span>
+                    </div>
+                    <div class="description">New sighting reported at Riverside Park</div>
+                    <span class="status-badge urgent">Urgent</span>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="flex-between">
+                        <span class="title">👁️ Sighting Verified</span>
+                        <span class="time">5 hours ago</span>
+                    </div>
+                    <div class="description">Sighting for Robert Johnson has been verified</div>
+                    <span class="status-badge verified">Verified</span>
+                </div>
+                
+                <div class="activity-item success">
+                    <div class="flex-between">
+                        <span class="title">✅ Found: James Thompson</span>
+                        <span class="time">1 day ago</span>
+                    </div>
+                    <div class="description">James has been found safe and reunited with family</div>
+                    <span class="status-badge found">Found</span>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="flex-between">
+                        <span class="title">👤 Profile Added</span>
+                        <span class="time">2 days ago</span>
+                    </div>
+                    <div class="description">Added new profile for William Brown</div>
+                    <span class="status-badge new">New</span>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="flex-between">
+                        <span class="title">📄 Report Created</span>
+                        <span class="time">3 days ago</span>
+                    </div>
+                    <div class="description">Missing report created for Helen Wilson</div>
+                    <span class="status-badge active">Active</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alerts & Notifications -->
+        <div>
+            <div class="card" style="border-left: 4px solid #E74C3C;">
+                <div class="card-header">
+                    <span class="card-title">🔔 Alerts</span>
+                    <span style="background: #E74C3C; color: white; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">2 New</span>
+                </div>
+                
+                <div class="alert-box urgent">
+                    <div class="flex-between">
+                        <span style="font-weight: 600; font-size: 14px;">⚠️ Urgent: Maria Garcia</span>
+                        <span style="font-size: 12px; color: var(--text-gray);">1 hour ago</span>
+                    </div>
+                    <p style="font-size: 13px; color: var(--text-gray); margin-top: 4px;">
+                        New sighting reported at Riverside Park. Please verify.
+                    </p>
+                    <a href="view-sightings.html" class="btn btn-primary btn-sm" style="margin-top: 8px;">View Sighting</a>
+                </div>
+                
+                <div class="alert-box info">
+                    <div class="flex-between">
+                        <span style="font-weight: 600; font-size: 14px;">ℹ️ New Sighting</span>
+                        <span style="font-size: 12px; color: var(--text-gray);">3 hours ago</span>
+                    </div>
+                    <p style="font-size: 13px; color: var(--text-gray); margin-top: 4px;">
+                        Robert Johnson sighted at Downtown Library.
+                    </p>
+                    <a href="view-sightings.html" class="btn btn-outline btn-sm" style="margin-top: 8px;">Review</a>
+                </div>
+                
+                <div class="alert-box success">
+                    <div class="flex-between">
+                        <span style="font-weight: 600; font-size: 14px;">✅ Weekly Report Ready</span>
+                        <span style="font-size: 12px; color: var(--text-gray);">1 day ago</span>
+                    </div>
+                    <p style="font-size: 13px; color: var(--text-gray); margin-top: 4px;">
+                        Your weekly caregiver report is available for download.
+                    </p>
+                    <button class="btn btn-secondary btn-sm" style="margin-top: 8px;" onclick="showToast('Success', 'Downloading report...', 'success')">Download Report</button>
+                </div>
+            </div>
+
+            <!-- Tips -->
+            <div class="card mt-3" style="background: linear-gradient(135deg, #90EE90, #6BCB6B); color: white;">
+                <h4 style="font-size: 16px;">💡 Tip of the Day</h4>
+                <p style="font-size: 14px; opacity: 0.9; margin-top: 8px;">
+                    "Keep a recent photo of your elderly loved one handy. It's the most effective way to help others identify them if they wander."
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+RECENT CASES
+============================================================ -->
+<section class="container mt-4 mb-5">
+    <div class="flex-between flex-wrap">
+        <div>
+            <h3 style="font-size: 18px;">📋 Active Missing Cases</h3>
+            <p style="font-size: 14px; color: var(--text-gray);">Cases that need your attention</p>
+        </div>
+        <a href="report-history.html" class="btn btn-outline btn-sm">View All</a>
+    </div>
+
+    <div class="grid-3 mt-3">
+        <div class="case-card">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='180'%3E%3Crect width='300' height='180' fill='%23D4EEF7'/%3E%3Ctext x='150' y='95' text-anchor='middle' font-family='Arial' font-size='40' fill='%235BA3C9'%3EMG%3C/text%3E%3C/svg%3E" alt="Maria Garcia" class="case-image" />
+            <div class="case-body">
+                <h3>Maria Garcia</h3>
+                <div class="case-meta">Age: 78 • Missing: 3 days ago</div>
+                <p class="case-description">
+                    Last seen at Riverside Park. Has Alzheimer's and requires medication.
+                </p>
+            </div>
+            <div class="case-footer">
+                <span class="case-status urgent">🚨 Urgent</span>
+                <a href="#" class="btn btn-outline btn-sm" onclick="showToast('Info', 'Opening case details...', 'info')">View Details</a>
+            </div>
+        </div>
+
+        <div class="case-card">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='180'%3E%3Crect width='300' height='180' fill='%23D4EEF7'/%3E%3Ctext x='150' y='95' text-anchor='middle' font-family='Arial' font-size='40' fill='%235BA3C9'%3ERJ%3C/text%3E%3C/svg%3E" alt="Robert Johnson" class="case-image" />
+            <div class="case-body">
+                <h3>Robert Johnson</h3>
+                <div class="case-meta">Age: 72 • Missing: 5 days ago</div>
+                <p class="case-description">
+                    Last seen in Downtown area. Has diabetes and needs insulin.
+                </p>
+            </div>
+            <div class="case-footer">
+                <span class="case-status active">⚠️ Active</span>
+                <a href="#" class="btn btn-outline btn-sm" onclick="showToast('Info', 'Opening case details...', 'info')">View Details</a>
+            </div>
+        </div>
+
+        <div class="case-card">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='180'%3E%3Crect width='300' height='180' fill='%23D4EEF7'/%3E%3Ctext x='150' y='95' text-anchor='middle' font-family='Arial' font-size='40' fill='%235BA3C9'%3EHW%3C/text%3E%3C/svg%3E" alt="Helen Wilson" class="case-image" />
+            <div class="case-body">
+                <h3>Helen Wilson</h3>
+                <div class="case-meta">Age: 81 • Missing: 6 days ago</div>
+                <p class="case-description">
+                    Last seen at Westside Mall. Has Alzheimer's Stage 5.
+                </p>
+            </div>
+            <div class="case-footer">
+                <span class="case-status active">⚠️ Active</span>
+                <a href="#" class="btn btn-outline btn-sm" onclick="showToast('Info', 'Opening case details...', 'info')">View Details</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+FOOTER
+============================================================ -->
+<footer class="footer">
+    <div class="container">
+        <div>
+            <h4><i class="fas fa-shield-alt" style="color: var(--primary);"></i> CarePath</h4>
+            <p>
+                A community-driven platform dedicated to raising awareness
+                and helping locate missing elderly individuals with Alzheimer's.
+            </p>
+        </div>
+        <div>
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../about.html">About</a></li>
+                <li><a href="../community/active-cases.html">Cases</a></li>
+                <li><a href="../community/safety-guide.html">Safety Guide</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>For Caregivers</h4>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="add-elderly.html">Add Profile</a></li>
+                <li><a href="manage-elderly.html">Manage Profiles</a></li>
+                <li><a href="report-history.html">Reports</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>Contact</h4>
+            <ul>
+                <li><a href="mailto:help@CarePath.com">help@CarePath.com</a></li>
+                <li><a href="tel:+11234567890">+1 (123) 456-7890</a></li>
+                <li><a href="../contact.html">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 CarePath. All rights reserved. | Made with ❤️ for the community
+        </div>
+    </div>
+</footer>
+
+<!-- ============================================================
+SCRIPTS
+============================================================ -->
+<script>
+    // ============================================================
+    // HAMBURGER TOGGLE
+    // ============================================================
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', function() {
+        this.classList.toggle('active');
+        navLinks.classList.toggle('open');
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('open');
+        });
+    });
+
+    // ============================================================
+    // TOAST NOTIFICATION
+    // ============================================================
+    function showToast(title, message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            info: 'fa-info-circle'
+        };
+        
+        toast.innerHTML = `
+            <div class="toast-icon"><i class="fas ${icons[type] || icons.info}"></i></div>
+            <div class="toast-content">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+            <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+        `;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(20px)';
+                setTimeout(() => {
+                    if (toast.parentElement) toast.remove();
+                }, 300);
+            }
+        }, 5000);
+    }
+
+    // ============================================================
+    // COUNTER ANIMATION
+    // ============================================================
+    function animateNumbers() {
+        const targets = [
+            { id: 'totalElderly', target: 4 },
+            { id: 'activeCases', target: 2 },
+            { id: 'totalSightings', target: 7 },
+            { id: 'foundCases', target: 3 }
+        ];
+
+        targets.forEach(({ id, target }) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            let current = 0;
+            const increment = Math.ceil(target / 40);
+            const interval = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(interval);
+                }
+                el.textContent = current;
+            }, 30);
+        });
+    }
+
+    // ============================================================
+    // PREVENT ZOOM ON DOUBLE TAP (iOS)
+    // ============================================================
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) e.preventDefault();
+        lastTouchEnd = now;
+    }, false);
+
+    // ============================================================
+    // VIEWPORT HEIGHT FOR MOBILE
+    // ============================================================
+    function setVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+    }
+    setVH();
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', () => setTimeout(setVH, 200));
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    setTimeout(animateNumbers, 300);
+    
+    // Welcome toast
+    setTimeout(() => {
+        showToast('Welcome Back!', 'You have 2 new alerts waiting for your attention.', 'info');
+    }, 1500);
+    async function loadDashboard() {
+        try {
+            // Get current user
+            const user = await api.getCurrentUser();
+            document.querySelector('.user-name').textContent = user.data.name;
+            
+            // Get elderly count
+            const elderly = await api.getElderly(1, 100);
+            document.querySelector('.stat-total').textContent = elderly.data.total;
+            
+            // Get recent sightings
+            const sightings = await api.getSightings({ limit: 5 });
+            renderRecentSightings(sightings.data);
+            
+        } catch (error) {
+            console.error('Dashboard error:', error);
+            showToast('⚠️ Error loading dashboard', 'error');
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', loadDashboard);
+</script>
+
+</body>
+</html>

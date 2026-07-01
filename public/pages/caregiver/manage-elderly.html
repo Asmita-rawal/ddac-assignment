@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Manage Elderly Profiles - CarePath</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    
+    <style>
+        /* ============================================================
+           CSS VARIABLES & RESET
+           ============================================================ */
+        :root {
+            --primary: #87CEEB;
+            --primary-dark: #5BA3C9;
+            --primary-light: #D4EEF7;
+            --secondary: #90EE90;
+            --secondary-dark: #6BCB6B;
+            --secondary-light: #D4F5D4;
+            --white: #FFFFFF;
+            --off-white: #F8F9FA;
+            --off-white-dark: #E9ECEF;
+            --text-dark: #1a2a3a;
+            --text-gray: #6B7A8A;
+            --text-muted: #4a5a6a;
+            --shadow: 0 10px 40px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 60px rgba(0,0,0,0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --nav-bg: rgba(255,255,255,0.92);
+            --card-bg: rgba(255,255,255,0.85);
+            --skyblue-gradient: linear-gradient(135deg, #87CEEB, #5BA3C9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--off-white);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: linear-gradient(135deg, var(--off-white) 0%, var(--primary-light) 50%, var(--secondary-light) 100%);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* ===== Background Decor ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -40%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(135,206,235,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatBg 10s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -30%;
+            left: -15%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(144,238,144,0.10) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatBgReverse 12s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-25px) scale(1.05); }
+        }
+        @keyframes floatBgReverse {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(25px) scale(1.05); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ============================================================
+           UTILITY CLASSES
+           ============================================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+        .flex {
+            display: flex;
+            align-items: center;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+        .gap-1 { gap: 8px; }
+        .gap-2 { gap: 12px; }
+        .gap-3 { gap: 16px; }
+        .mt-2 { margin-top: 12px; }
+        .mt-3 { margin-top: 20px; }
+        .mt-4 { margin-top: 32px; }
+        .mb-3 { margin-bottom: 20px; }
+        .mb-4 { margin-bottom: 32px; }
+        .mb-5 { margin-bottom: 40px; }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 22px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            min-height: 42px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 16px rgba(135,206,235,0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(135,206,235,0.4);
+        }
+        .btn-secondary {
+            background: var(--white);
+            color: var(--text-dark);
+            border: 2px solid var(--off-white-dark);
+        }
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--text-dark);
+            border: 2px solid var(--off-white-dark);
+        }
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 13px;
+            min-height: 34px;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        /* ============================================================
+           NAVBAR
+           ============================================================ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+        .navbar-brand i {
+            color: var(--primary);
+            font-size: 28px;
+        }
+        .navbar-brand span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            font-size: 14px;
+            margin-left: 2px;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            font-size: 14px;
+            transition: var(--transition);
+            padding: 6px 0;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: var(--transition);
+        }
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        .nav-links a.active {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+        .nav-links a:hover {
+            color: var(--text-dark);
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+        .hamburger span {
+            width: 26px;
+            height: 3px;
+            background: var(--text-dark);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* ============================================================
+           PAGE HEADER
+           ============================================================ */
+        .page-header {
+            background: var(--skyblue-gradient);
+            padding: 40px 0;
+            color: white;
+            margin-top: 60px;
+        }
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+        }
+        .page-header p {
+            opacity: 0.9;
+        }
+
+        /* ============================================================
+           SEARCH BAR
+           ============================================================ */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--white);
+            border: 2px solid var(--off-white-dark);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            transition: var(--transition);
+            max-width: 500px;
+            width: 100%;
+        }
+        .search-bar:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(135,206,235,0.12);
+        }
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 10px 16px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            background: transparent;
+            color: var(--text-dark);
+            min-width: 120px;
+        }
+        .search-bar input::placeholder {
+            color: var(--text-gray);
+            opacity: 0.7;
+        }
+        .search-bar button {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--text-gray);
+            transition: var(--transition);
+        }
+        .search-bar button:hover {
+            color: var(--primary-dark);
+        }
+
+        /* ============================================================
+           PROFILE CARDS
+           ============================================================ */
+        .profile-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            padding: 24px 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            transition: var(--transition);
+        }
+        .profile-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 12px;
+            background: var(--primary-light);
+        }
+        .profile-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .profile-card p {
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        /* ============================================================
+           BADGES
+           ============================================================ */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-success {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+        .badge-danger {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+        .badge-warning {
+            background: #fffbeb;
+            color: #92400e;
+        }
+
+        /* ============================================================
+           CARD (for empty state)
+           ============================================================ */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            padding: 20px 22px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+        .card-hover {
+            cursor: pointer;
+        }
+        .card-hover:hover {
+            border-color: var(--primary);
+        }
+
+        /* ============================================================
+           TOAST NOTIFICATION
+           ============================================================ */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            padding: 14px 20px;
+            box-shadow: var(--shadow-hover);
+            border-left: 4px solid var(--primary);
+            animation: slideIn 0.3s ease;
+            min-width: 280px;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toast.success { border-left-color: var(--secondary-dark); }
+        .toast.error { border-left-color: #E74C3C; }
+        .toast.info { border-left-color: var(--primary); }
+        .toast .toast-icon { font-size: 20px; }
+        .toast.success .toast-icon { color: var(--secondary-dark); }
+        .toast.error .toast-icon { color: #E74C3C; }
+        .toast.info .toast-icon { color: var(--primary); }
+        .toast .toast-content { flex: 1; }
+        .toast .toast-title { font-weight: 600; font-size: 14px; }
+        .toast .toast-message { font-size: 13px; color: var(--text-gray); }
+        .toast .toast-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text-gray);
+            padding: 0 4px;
+        }
+        .toast .toast-close:hover { color: var(--text-dark); }
+
+        /* ============================================================
+           PAGINATION
+           ============================================================ */
+        .pagination {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .pagination .btn {
+            min-width: 40px;
+            justify-content: center;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .footer {
+            margin-top: auto;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255,255,255,0.3);
+            padding: 36px 0 20px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        .footer .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 32px;
+        }
+        .footer h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+        .footer p {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+        .footer ul {
+            list-style: none;
+        }
+        .footer ul li {
+            margin-bottom: 4px;
+        }
+        .footer ul a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        .footer ul a:hover {
+            color: var(--text-dark);
+        }
+        .footer-bottom {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--off-white-dark);
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 992px) {
+            .grid-3 {
+                grid-template-columns: 1fr 1fr;
+            }
+            .footer .container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(255,255,255,0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 24px 20px;
+                gap: 12px;
+                transform: translateY(-120%);
+                transition: var(--transition);
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+                align-items: stretch;
+                text-align: center;
+            }
+            .nav-links.open {
+                transform: translateY(0);
+            }
+            .nav-links .btn {
+                justify-content: center;
+            }
+
+            .container {
+                padding: 0 16px;
+            }
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .page-header {
+                padding: 30px 0 20px;
+                margin-top: 56px;
+            }
+            .page-header h1 {
+                font-size: 24px;
+            }
+            .footer .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                text-align: center;
+            }
+            .flex-between {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            .search-bar {
+                max-width: 100%;
+            }
+            .toast-container {
+                right: 12px;
+                left: 12px;
+            }
+            .toast {
+                min-width: unset;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn {
+                font-size: 13px;
+                padding: 8px 16px;
+                min-height: 38px;
+            }
+            .profile-card {
+                padding: 18px 14px;
+            }
+            .profile-avatar {
+                width: 64px;
+                height: 64px;
+            }
+        }
+
+        @media (max-height: 600px) and (orientation: landscape) {
+            .navbar {
+                padding: 6px 0;
+            }
+            .navbar-brand i {
+                font-size: 22px;
+            }
+            .navbar-brand {
+                font-size: 18px;
+            }
+            .page-header {
+                margin-top: 50px;
+                padding: 20px 0 16px;
+            }
+            .page-header h1 {
+                font-size: 22px;
+            }
+            .grid-3 {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 12px;
+            }
+            .profile-card {
+                padding: 14px 12px;
+            }
+            .profile-avatar {
+                width: 48px;
+                height: 48px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        @media print {
+            .navbar, .footer { display: none; }
+            .page-header { margin-top: 0; }
+            .profile-card { border: 1px solid #ddd; }
+            .btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================
+NAVBAR
+============================================================ -->
+<nav class="navbar" id="navbar">
+    <div class="container">
+        <a href="dashboard.html" class="navbar-brand">
+            <i class="fas fa-shield-alt"></i>
+            CarePath
+            <span>Caregiver</span>
+        </a>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="add-elderly.html">Add Elderly</a></li>
+            <li><a href="manage-elderly.html" class="active">Manage Profiles</a></li>
+            <li><a href="report-history.html">Reports</a></li>
+            <li><a href="view-sightings.html">Sightings</a></li>
+            <li><a href="../index.html" class="btn btn-danger btn-sm">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ============================================================
+TOAST CONTAINER
+============================================================ -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ============================================================
+PAGE HEADER
+============================================================ -->
+<section class="page-header">
+    <div class="container flex-between flex-wrap">
+        <div>
+            <h1>Manage Elderly Profiles</h1>
+            <p>View and manage all elderly profiles under your care</p>
+        </div>
+        <a href="add-elderly.html" class="btn" style="background: white; color: var(--primary-dark);">
+            <i class="fas fa-user-plus"></i> Add New Profile
+        </a>
+    </div>
+</section>
+
+<!-- ============================================================
+SEARCH & FILTERS
+============================================================ -->
+<section class="container mt-4">
+    <div class="flex-between flex-wrap" style="gap: 12px;">
+        <div class="search-bar">
+            <input type="text" placeholder="Search by name or condition..." id="searchInput" />
+            <button onclick="performSearch()"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="flex" style="gap: 8px; flex-wrap: wrap;">
+            <span style="font-weight: 600; color: var(--text-gray); font-size: 14px;">Filter:</span>
+            <button class="btn btn-primary btn-sm" onclick="filterProfiles('all')">All</button>
+            <button class="btn btn-outline btn-sm" onclick="filterProfiles('active')">Active</button>
+            <button class="btn btn-outline btn-sm" onclick="filterProfiles('inactive')">Inactive</button>
+            <button class="btn btn-outline btn-sm" onclick="filterProfiles('alzheimer')">Alzheimer's</button>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+PROFILES LIST
+============================================================ -->
+<section class="container mt-4 mb-5">
+    <div class="grid-3" id="profilesContainer">
+        <!-- Profile Card 1 -->
+        <div class="profile-card fade-in" data-status="active" data-condition="alzheimer">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' rx='40' fill='%23D4EEF7'/%3E%3Ctext x='40' y='50' text-anchor='middle' font-family='Arial' font-size='32' fill='%235BA3C9'%3ERJ%3C/text%3E%3C/svg%3E" alt="Robert Johnson" class="profile-avatar" />
+            <h3>Robert Johnson</h3>
+            <p>Age: 72 • Male</p>
+            <p style="font-size: 13px; color: var(--text-gray);">
+                Alzheimer's Stage 4, Diabetes
+            </p>
+            <span class="badge badge-success">Active</span>
+            <div style="margin-top: 12px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                <a href="edit-elderly.html?id=1" class="btn btn-primary btn-sm">Edit</a>
+                <a href="report-history.html?id=1" class="btn btn-outline btn-sm">Reports</a>
+                <button class="btn btn-danger btn-sm" onclick="confirmDelete('Robert Johnson')">Delete</button>
+            </div>
+        </div>
+
+        <!-- Profile Card 2 -->
+        <div class="profile-card fade-in" data-status="active" data-condition="alzheimer" style="animation-delay: 0.15s;">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' rx='40' fill='%23D4EEF7'/%3E%3Ctext x='40' y='50' text-anchor='middle' font-family='Arial' font-size='32' fill='%235BA3C9'%3EMG%3C/text%3E%3C/svg%3E" alt="Maria Garcia" class="profile-avatar" />
+            <h3>Maria Garcia</h3>
+            <p>Age: 78 • Female</p>
+            <p style="font-size: 13px; color: var(--text-gray);">
+                Alzheimer's Stage 3, Hypertension
+            </p>
+            <span class="badge badge-success">Active</span>
+            <div style="margin-top: 12px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                <a href="edit-elderly.html?id=2" class="btn btn-primary btn-sm">Edit</a>
+                <a href="report-history.html?id=2" class="btn btn-outline btn-sm">Reports</a>
+                <button class="btn btn-danger btn-sm" onclick="confirmDelete('Maria Garcia')">Delete</button>
+            </div>
+        </div>
+
+        <!-- Profile Card 3 -->
+        <div class="profile-card fade-in" data-status="inactive" data-condition="none" style="animation-delay: 0.3s;">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' rx='40' fill='%23D4EEF7'/%3E%3Ctext x='40' y='50' text-anchor='middle' font-family='Arial' font-size='32' fill='%235BA3C9'%3EJT%3C/text%3E%3C/svg%3E" alt="James Thompson" class="profile-avatar" />
+            <h3>James Thompson</h3>
+            <p>Age: 65 • Male</p>
+            <p style="font-size: 13px; color: var(--text-gray);">
+                Vascular Dementia, Parkinson's
+            </p>
+            <span class="badge badge-danger">Inactive</span>
+            <div style="margin-top: 12px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                <a href="edit-elderly.html?id=3" class="btn btn-primary btn-sm">Edit</a>
+                <a href="report-history.html?id=3" class="btn btn-outline btn-sm">Reports</a>
+                <button class="btn btn-danger btn-sm" onclick="confirmDelete('James Thompson')">Delete</button>
+            </div>
+        </div>
+
+        <!-- Profile Card 4 -->
+        <div class="profile-card fade-in" data-status="active" data-condition="alzheimer" style="animation-delay: 0.45s;">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' rx='40' fill='%23D4EEF7'/%3E%3Ctext x='40' y='50' text-anchor='middle' font-family='Arial' font-size='32' fill='%235BA3C9'%3EHW%3C/text%3E%3C/svg%3E" alt="Helen Wilson" class="profile-avatar" />
+            <h3>Helen Wilson</h3>
+            <p>Age: 81 • Female</p>
+            <p style="font-size: 13px; color: var(--text-gray);">
+                Alzheimer's Stage 5
+            </p>
+            <span class="badge badge-success">Active</span>
+            <div style="margin-top: 12px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                <a href="edit-elderly.html?id=4" class="btn btn-primary btn-sm">Edit</a>
+                <a href="report-history.html?id=4" class="btn btn-outline btn-sm">Reports</a>
+                <button class="btn btn-danger btn-sm" onclick="confirmDelete('Helen Wilson')">Delete</button>
+            </div>
+        </div>
+
+        <!-- Profile Card 5 -->
+        <div class="profile-card fade-in" data-status="active" data-condition="none" style="animation-delay: 0.6s;">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' rx='40' fill='%23D4EEF7'/%3E%3Ctext x='40' y='50' text-anchor='middle' font-family='Arial' font-size='32' fill='%235BA3C9'%3EWB%3C/text%3E%3C/svg%3E" alt="William Brown" class="profile-avatar" />
+            <h3>William Brown</h3>
+            <p>Age: 74 • Male</p>
+            <p style="font-size: 13px; color: var(--text-gray);">
+                Alzheimer's Stage 2, Arthritis
+            </p>
+            <span class="badge badge-success">Active</span>
+            <div style="margin-top: 12px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                <a href="edit-elderly.html?id=5" class="btn btn-primary btn-sm">Edit</a>
+                <a href="report-history.html?id=5" class="btn btn-outline btn-sm">Reports</a>
+                <button class="btn btn-danger btn-sm" onclick="confirmDelete('William Brown')">Delete</button>
+            </div>
+        </div>
+
+        <!-- Profile Card 6 (Empty/Add New) -->
+        <div class="card card-hover" style="display: flex; align-items: center; justify-content: center; min-height: 280px; border: 2px dashed var(--primary-light); text-align: center; padding: 30px 20px;">
+            <div>
+                <div style="font-size: 48px; color: var(--primary);"><i class="fas fa-plus-circle"></i></div>
+                <h3 style="margin: 12px 0;">Add New Profile</h3>
+                <p style="color: var(--text-gray); font-size: 14px;">Click to add a new elderly person</p>
+                <a href="add-elderly.html" class="btn btn-primary" style="margin-top: 12px;">Add Profile</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- No Results Message -->
+    <div id="noResults" style="display: none; text-align: center; padding: 40px;">
+        <div style="font-size: 48px;"><i class="fas fa-search" style="color: var(--text-gray);"></i></div>
+        <h3 style="margin: 12px 0;">No profiles found</h3>
+        <p style="color: var(--text-gray);">Try adjusting your search or filters</p>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex-center mt-4 pagination">
+        <button class="btn btn-outline btn-sm" disabled><i class="fas fa-chevron-left"></i></button>
+        <button class="btn btn-primary btn-sm">1</button>
+        <button class="btn btn-outline btn-sm">2</button>
+        <button class="btn btn-outline btn-sm"><i class="fas fa-chevron-right"></i></button>
+    </div>
+</section>
+
+<!-- ============================================================
+FOOTER
+============================================================ -->
+<footer class="footer">
+    <div class="container">
+        <div>
+            <h4><i class="fas fa-shield-alt" style="color: var(--primary);"></i> CarePath</h4>
+            <p>A community-driven platform for missing elderly awareness.</p>
+        </div>
+        <div>
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../about.html">About</a></li>
+                <li><a href="../community/active-cases.html">Cases</a></li>
+                <li><a href="../community/safety-guide.html">Safety Guide</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>Contact</h4>
+            <ul>
+                <li><a href="mailto:help@CarePath.com">help@CarePath.com</a></li>
+                <li><a href="tel:+11234567890">+1 (123) 456-7890</a></li>
+                <li><a href="../contact.html">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 CarePath. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<!-- ============================================================
+SCRIPTS
+============================================================ -->
+<script>
+    // ============================================================
+    // HAMBURGER TOGGLE
+    // ============================================================
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', function() {
+        this.classList.toggle('active');
+        navLinks.classList.toggle('open');
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('open');
+        });
+    });
+
+    // ============================================================
+    // TOAST NOTIFICATION
+    // ============================================================
+    function showToast(title, message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            info: 'fa-info-circle'
+        };
+        
+        toast.innerHTML = `
+            <div class="toast-icon"><i class="fas ${icons[type] || icons.info}"></i></div>
+            <div class="toast-content">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+            <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+        `;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(20px)';
+                setTimeout(() => {
+                    if (toast.parentElement) toast.remove();
+                }, 300);
+            }
+        }, 5000);
+    }
+
+    // ============================================================
+    // SEARCH FUNCTIONALITY
+    // ============================================================
+    function performSearch() {
+        const input = document.getElementById('searchInput');
+        const query = input.value.toLowerCase().trim();
+        const cards = document.querySelectorAll('.profile-card');
+        let found = 0;
+
+        cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            if (text.includes(query)) {
+                card.style.display = 'block';
+                found++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        document.getElementById('noResults').style.display = found === 0 ? 'block' : 'none';
+    }
+
+    // ============================================================
+    // FILTER FUNCTIONALITY
+    // ============================================================
+    function filterProfiles(filter) {
+        const cards = document.querySelectorAll('.profile-card');
+        let found = 0;
+
+        // Update active button styles
+        document.querySelectorAll('.flex button').forEach(btn => {
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-outline');
+        });
+        
+        // Find the clicked button and make it primary
+        const buttons = document.querySelectorAll('.flex button');
+        const filterMap = {
+            'all': 0,
+            'active': 1,
+            'inactive': 2,
+            'alzheimer': 3
+        };
+        const index = filterMap[filter] || 0;
+        if (buttons[index]) {
+            buttons[index].classList.remove('btn-outline');
+            buttons[index].classList.add('btn-primary');
+        }
+
+        cards.forEach(card => {
+            const status = card.dataset.status;
+            const condition = card.dataset.condition;
+
+            let show = false;
+            if (filter === 'all') show = true;
+            else if (filter === 'active' && status === 'active') show = true;
+            else if (filter === 'inactive' && status === 'inactive') show = true;
+            else if (filter === 'alzheimer' && condition === 'alzheimer') show = true;
+
+            if (show) {
+                card.style.display = 'block';
+                found++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        document.getElementById('noResults').style.display = found === 0 ? 'block' : 'none';
+    }
+
+    // ============================================================
+    // CONFIRM DELETE
+    // ============================================================
+    function confirmDelete(name) {
+        if (confirm(`⚠️ Are you sure you want to delete ${name}? This action cannot be undone.`)) {
+            showToast('Success', `${name} has been deleted successfully.`, 'success');
+        }
+    }
+
+    // ============================================================
+    // SEARCH ON ENTER KEY
+    // ============================================================
+    document.getElementById('searchInput').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+
+    // ============================================================
+    // PREVENT ZOOM ON DOUBLE TAP (iOS)
+    // ============================================================
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) e.preventDefault();
+        lastTouchEnd = now;
+    }, false);
+
+    // ============================================================
+    // VIEWPORT HEIGHT FOR MOBILE
+    // ============================================================
+    function setVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+    }
+    setVH();
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', () => setTimeout(setVH, 200));
+</script>
+
+</body>
+</html>
