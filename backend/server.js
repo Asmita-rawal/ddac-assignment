@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const mysql = require('mysql2');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
@@ -17,12 +18,16 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, '..', 'public')));
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'pages', 'index.html'));
+});
 
 // Database Connection
 const db = mysql.createConnection({
     host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'safetrack_db',
-    password: process.env.DB_PASSWORD || '@Root_001646',
+    user: process.env.DB_USER || 'safetrack',
+    password: process.env.DB_PASSWORD || 'safetrack_password',
     database: process.env.DB_NAME || 'safetrack'
 });
 

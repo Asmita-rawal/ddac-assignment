@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    container_name: safetrack-app
+    ports:
+      - "5001:5001"
+    environment:
+      NODE_ENV: production
+      PORT: 5001
+      DB_HOST: db
+      DB_USER: safetrack
+      DB_PASSWORD: safetrack_password
+      DB_NAME: safetrack
+      JWT_SECRET: safetrack_secret_key_2024
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    container_name: safetrack-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: safetrack
+      MYSQL_USER: safetrack
+      MYSQL_PASSWORD: safetrack_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/1_schema.sql:ro
+    restart: unless-stopped
+
+volumes:
+  mysql-data:

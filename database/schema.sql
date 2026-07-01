@@ -1,5 +1,6 @@
--- Use the database
-USE safetrack_db;
+-- Create and use the database
+CREATE DATABASE IF NOT EXISTS safetrack;
+USE safetrack;
 
 -- Users table
 CREATE TABLE IF NOT EXISTS users (

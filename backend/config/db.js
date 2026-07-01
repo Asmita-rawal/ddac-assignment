@@ -8,9 +8,9 @@ dotenv.config({ path: path.join(__dirname, '../../.env') });
 // Create connection pool
 const pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '@Root_001646',
-    database: process.env.DB_NAME || 'safetrack_db',
+    user: process.env.DB_USER || 'safetrack',
+    password: process.env.DB_PASSWORD || 'safetrack_password',
+    database: process.env.DB_NAME || 'safetrack',
     port: process.env.DB_PORT || 3306,
     waitForConnections: true,
     connectionLimit: 10,
